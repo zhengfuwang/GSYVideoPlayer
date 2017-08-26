@@ -523,6 +523,14 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         updateStartImage();
     }
 
+    /**
+     * 显示封面
+     */
+    public void showThumbImageView() {
+        if (mThumbImageView != null && mThumbImageViewLayout != null) {
+            setViewShowState(mThumbImageViewLayout, VISIBLE);
+        }
+    }
 
     protected void changeUiToPrepareingClear() {
         Debuger.printfLog("changeUiToPrepareingClear");

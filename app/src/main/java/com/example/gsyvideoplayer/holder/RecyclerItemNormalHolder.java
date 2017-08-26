@@ -54,13 +54,15 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
         gsyVideoPlayer.setIsTouchWiget(false);
 
         gsyVideoPlayer.setThumbImageView(imageView);
+        // 未设置setup方法时可调用此方法显示默认封面
+        gsyVideoPlayer.showThumbImageView();
 
         final String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
 
         gsyVideoPlayer.setTitle("这是title");
 
         //默认缓存路径
-        gsyVideoPlayer.setUp(url, true , null);
+        // gsyVideoPlayer.setUp(url, true , null);
 
         //增加title
         gsyVideoPlayer.getTitleTextView().setVisibility(View.GONE);
@@ -80,7 +82,7 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
         gsyVideoPlayer.setPlayTag(TAG);
         gsyVideoPlayer.setShowFullAnimation(true);
         //循环
-        gsyVideoPlayer.setLooping(true);
+        gsyVideoPlayer.setLooping(false);
         gsyVideoPlayer.setNeedLockFull(true);
         gsyVideoPlayer.setPlayPosition(position);
     }
