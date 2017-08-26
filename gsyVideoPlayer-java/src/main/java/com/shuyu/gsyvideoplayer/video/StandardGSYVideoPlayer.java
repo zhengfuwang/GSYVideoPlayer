@@ -718,4 +718,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         setVideoAllCallBack(standardVideoAllCallBack);
     }
 
+    public String getMediaUrl() {
+        return mOriginUrl;
+    }
 }

@@ -10,6 +10,7 @@ import android.media.MediaPlayer;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.InflateException;
 import android.view.View;
@@ -61,6 +62,8 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     public static final int CURRENT_STATE_AUTO_COMPLETE = 6;
     //错误状态
     public static final int CURRENT_STATE_ERROR = 7;
+    //获取播放URL状态
+    public static final int CURRENT_STATE_OBTAIN_URL = 8;
 
     //避免切换时频繁setup
     public static final int CHANGE_DELAY_TIME = 2000;
@@ -261,6 +264,21 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     }
 
     /**
+     * 获取播放URL逻辑
+     */
+    protected boolean obtainLogic() {
+        if (mVideoAllCallBack != null && mCurrentState == CURRENT_STATE_OBTAIN_URL) {
+            boolean processed = mVideoAllCallBack.onObtainMediaUrl(this);
+            // 已处理获取URL逻辑切换为准备状态
+            if (processed) {
+                prepareObtailMediaUrl();
+            }
+            return processed;
+        }
+        return false;
+    }
+
+    /**
      * 开始播放逻辑
      */
     protected void startButtonLogic() {
@@ -272,6 +290,20 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
             mVideoAllCallBack.onClickStartError(mOriginUrl, mTitle, this);
         }
         prepareVideo();
+    }
+
+    /**
+     * 开启获取URL状态
+     */
+    protected void prepareObtailMediaUrl() {
+        if (GSYVideoManager.instance().listener() != null) {
+            GSYVideoManager.instance().listener().onCompletion();
+        }
+        GSYVideoManager.instance().setListener(this);
+        GSYVideoManager.instance().setPlayTag(mPlayTag);
+        GSYVideoManager.instance().setPlayPosition(mPlayPosition);
+        mBackUpPlayingBufferState = -1;
+        setStateAndUi(CURRENT_STATE_PREPAREING);
     }
 
     /**
@@ -361,6 +393,9 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      * @return
      */
     public boolean setUp(String url, boolean cacheWithPlay, File cachePath) {
+        if (TextUtils.isEmpty(url)) {
+            return false;
+        }
         mCache = cacheWithPlay;
         mCachePath = cachePath;
         mOriginUrl = url;

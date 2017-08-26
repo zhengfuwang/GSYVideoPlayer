@@ -1,6 +1,7 @@
 package com.example.gsyvideoplayer.holder;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -54,7 +55,7 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
         gsyVideoPlayer.setIsTouchWiget(false);
 
         gsyVideoPlayer.setThumbImageView(imageView);
-        // 未设置setup方法时可调用此方法显示默认封面
+        // 未设置setup方法时可调用此方法显示封面
         gsyVideoPlayer.showThumbImageView();
 
         final String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
@@ -63,9 +64,6 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
 
         //默认缓存路径
         // gsyVideoPlayer.setUp(url, true , null);
-
-        //增加title
-        gsyVideoPlayer.getTitleTextView().setVisibility(View.GONE);
 
         //设置返回键
         gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
@@ -85,12 +83,28 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
         gsyVideoPlayer.setLooping(false);
         gsyVideoPlayer.setNeedLockFull(true);
         gsyVideoPlayer.setPlayPosition(position);
+
+        gsyVideoPlayer.setStandardVideoAllCallBack(new SampleListener() {
+            @Override
+            public boolean onObtainMediaUrl(Object... objects) {
+                gsyVideoPlayer.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        gsyVideoPlayer.startWithSetUp(url, true , null);
+                    }
+                }, 3000);
+                return true;
+            }
+        });
     }
 
     /**
      * 全屏幕按键处理
      */
     private void resolveFullBtn(final StandardGSYVideoPlayer standardGSYVideoPlayer) {
+        if (TextUtils.isEmpty(standardGSYVideoPlayer.getMediaUrl())) {
+            return;
+        }
         standardGSYVideoPlayer.startWindowFullscreen(context, true, true);
     }
 

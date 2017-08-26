@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Explode;
+import android.util.Log;
 import android.view.Window;
 
 import com.example.gsyvideoplayer.adapter.RecyclerBaseAdapter;
@@ -84,8 +85,9 @@ public class RecyclerViewActivity extends AppCompatActivity {
                         //如果滑出去了上面和下面就是否，和今日头条一样
                         //是否全屏
                         if(!mFull) {
+                            Log.e("--", "--> 释放资源");
                             GSYVideoPlayer.releaseAllVideos();
-                            recyclerNormalAdapter.notifyDataSetChanged();
+                            // recyclerNormalAdapter.notifyDataSetChanged();
                         }
                     }
                 }

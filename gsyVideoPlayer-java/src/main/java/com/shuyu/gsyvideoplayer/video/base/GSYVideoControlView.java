@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -293,6 +294,9 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
      */
     @Override
     protected void setStateAndUi(int state) {
+        if (mCurrentState == state) {
+            return;
+        }
         mCurrentState = state;
         switch (mCurrentState) {
             case CURRENT_STATE_NORMAL:
@@ -379,6 +383,10 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                 onClickUiToggle();
             }
         } else if (i == R.id.surface_container) {
+            // 播放地址无效时禁止全屏操作
+            if (TextUtils.isEmpty(mOriginUrl)) {
+                return;
+            }
             if (mVideoAllCallBack != null && isCurrentMediaListener()) {
                 if (mIfCurrentIsFullscreen) {
                     Debuger.printfLog("onClickBlankFullscreen");
@@ -518,6 +526,21 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         return false;
     }
 
+    /**
+     * 设置播放URL并开始播放
+     *
+     * @param url           播放url
+     * @param cacheWithPlay 是否边播边缓存
+     * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
+     * @return
+     */
+    public void startWithSetUp(String url, boolean cacheWithPlay, File cachePath) {
+        if (setUp(url, cacheWithPlay, cachePath)) {
+            clickStartIcon();
+        } else {
+            Log.e(getClass().getName(), "startWithSetUp() Failed !");
+        }
+    }
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -532,6 +555,10 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
      */
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+        // 未设置播放地址不处理拖动进度条逻辑
+        if (TextUtils.isEmpty(mOriginUrl)) {
+            return;
+        }
         if (mVideoAllCallBack != null && isCurrentMediaListener()) {
             if (isIfCurrentIsFullscreen()) {
                 Debuger.printfLog("onClickSeekbarFullscreen");
@@ -725,7 +752,13 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
      */
     protected void clickStartIcon() {
         if (TextUtils.isEmpty(mUrl)) {
-            Debuger.printfError("********" + getResources().getString(R.string.no_url));
+            mCurrentState = CURRENT_STATE_OBTAIN_URL;
+            if (obtainLogic()) {
+                Debuger.printfError("******** 执行获取播放地址Url逻辑 ********");
+            } else {
+                Debuger.printfError("********" + getResources().getString(R.string.no_url));
+            }
+
             //Toast.makeText(getActivityContext(), getResources().getString(R.string.no_url), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -832,6 +865,10 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         if (mProgressBar == null || mTotalTimeTextView == null || mCurrentTimeTextView == null) {
             return;
         }
+        setViewShowState(mProgressBar, VISIBLE);
+        setViewShowState(mTotalTimeTextView, VISIBLE);
+        setViewShowState(mCurrentTimeTextView, VISIBLE);
+
         mProgressBar.setProgress(0);
         mProgressBar.setSecondaryProgress(0);
         mCurrentTimeTextView.setText(CommonUtil.stringForTime(0));

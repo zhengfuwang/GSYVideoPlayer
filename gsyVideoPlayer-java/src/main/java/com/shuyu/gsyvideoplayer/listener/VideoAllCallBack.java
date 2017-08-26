@@ -6,6 +6,9 @@ package com.shuyu.gsyvideoplayer.listener;
  */
 public interface VideoAllCallBack {
 
+    // 点击了开始播放，url为空时获取播放地址，object[1]是当前所处播放器（全屏或非全屏）
+    boolean onObtainMediaUrl(Object... objects);
+
     //加载成功，objects[0]是title，object[1]是当前所处播放器（全屏或非全屏）
     void onPrepared(String url, Object... objects);
 

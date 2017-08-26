@@ -8,6 +8,12 @@ import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
 
 public class SampleListener implements StandardVideoAllCallBack {
 
+    // 点击了开始播放，url为空时获取播放地址，object[1]是当前所处播放器（全屏或非全屏）
+    @Override
+    public boolean onObtainMediaUrl(Object... objects) {
+        return false;
+    }
+
     //加载成功，objects[0]是title，object[1]是当前所处播放器（全屏或非全屏）
     @Override
     public void onPrepared(String url, Object... objects) {
