@@ -52,7 +52,8 @@ public class WebDetailActivity extends AppCompatActivity {
 
         String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
         //String url = "https://d131x7vzzf85jg.cloudfront.net/upload/documents/paper/b2/61/00/00/20160420_115018_b544.mp4";
-        webPlayer.setUp(url, false, null, "测试视频");
+        webPlayer.setTitle("测试视频");
+        webPlayer.setUp(url, false, null);
 
         //增加封面
         ImageView imageView = new ImageView(this);

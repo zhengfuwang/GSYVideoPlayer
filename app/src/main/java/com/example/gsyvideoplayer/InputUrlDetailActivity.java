@@ -53,7 +53,8 @@ public class InputUrlDetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         url = "http://baobab.wdjcdn.com/14564977406580.mp4";
-        detailPlayer.setUp(url, cache, null, "测试视频");
+        detailPlayer.setTitle("测试视频");
+        detailPlayer.setUp(url, cache, null);
 
 
         //增加封面
@@ -194,7 +195,8 @@ public class InputUrlDetailActivity extends AppCompatActivity {
 
     private void playVideo() {
         detailPlayer.release();
-        detailPlayer.setUp(url, cache, null, "测试视频");
+        detailPlayer.setTitle("测试视频");
+        detailPlayer.setUp(url, cache, null);
         detailPlayer.postDelayed(new Runnable() {
             @Override
             public void run() {

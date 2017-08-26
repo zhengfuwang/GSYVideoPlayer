@@ -55,7 +55,8 @@ public class DanmkuVideoActivity extends AppCompatActivity {
 
         String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
         //String url = "https://res.exexm.com/cw_145225549855002";
-        danmakuVideoPlayer.setUp(url, true, null, "测试视频");
+        danmakuVideoPlayer.setTitle("测试视频");
+        danmakuVideoPlayer.setUp(url, true, null);
 
         //增加封面
         ImageView imageView = new ImageView(this);

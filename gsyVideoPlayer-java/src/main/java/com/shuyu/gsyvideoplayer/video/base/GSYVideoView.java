@@ -326,11 +326,10 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      *
      * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
-     * @param title         title
      * @return
      */
-    public boolean setUp(String url, boolean cacheWithPlay, String title) {
-        return setUp(url, cacheWithPlay, ((File) null), title);
+    public boolean setUp(String url, boolean cacheWithPlay) {
+        return setUp(url, cacheWithPlay, ((File) null));
     }
 
 
@@ -341,11 +340,10 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      * @param cacheWithPlay 是否边播边缓存
      * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
      * @param mapHeadData   头部信息
-     * @param title         title
      * @return
      */
-    public boolean setUp(String url, boolean cacheWithPlay, File cachePath, Map<String, String> mapHeadData, String title) {
-        if (setUp(url, cacheWithPlay, cachePath, title)) {
+    public boolean setUp(String url, boolean cacheWithPlay, File cachePath, Map<String, String> mapHeadData) {
+        if (setUp(url, cacheWithPlay, cachePath)) {
             this.mMapHeadData.clear();
             if (mapHeadData != null)
                 this.mMapHeadData.putAll(mapHeadData);
@@ -360,10 +358,9 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
      * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
-     * @param title         title
      * @return
      */
-    public boolean setUp(String url, boolean cacheWithPlay, File cachePath, String title) {
+    public boolean setUp(String url, boolean cacheWithPlay, File cachePath) {
         mCache = cacheWithPlay;
         mCachePath = cachePath;
         mOriginUrl = url;
@@ -385,7 +382,6 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
             mCacheFile = true;
         }
         this.mUrl = url;
-        this.mTitle = title;
         setStateAndUi(CURRENT_STATE_NORMAL);
         return true;
     }

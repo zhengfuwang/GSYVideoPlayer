@@ -475,18 +475,23 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         return false;
     }
 
+    public void setTitle(String title) {
+        this.mTitle = title;
+        if (title != null && mTitleTextView != null) {
+            mTitleTextView.setText(title);
+        }
+    }
 
     /**
      * 设置播放URL
      *
      * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
-     * @param title         title
      * @return
      */
     @Override
-    public boolean setUp(String url, boolean cacheWithPlay, String title) {
-        return setUp(url, cacheWithPlay, (File) null, title);
+    public boolean setUp(String url, boolean cacheWithPlay) {
+        return setUp(url, cacheWithPlay, (File) null);
     }
 
     /**
@@ -495,15 +500,11 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
      * @param url           播放url
      * @param cacheWithPlay 是否边播边缓存
      * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
-     * @param title         title
      * @return
      */
     @Override
-    public boolean setUp(String url, boolean cacheWithPlay, File cachePath, String title) {
-        if (super.setUp(url, cacheWithPlay, cachePath, title)) {
-            if (title != null && mTitleTextView != null) {
-                mTitleTextView.setText(title);
-            }
+    public boolean setUp(String url, boolean cacheWithPlay, File cachePath) {
+        if (super.setUp(url, cacheWithPlay, cachePath)) {
             if (mIfCurrentIsFullscreen) {
                 if (mFullscreenButton != null)
                     mFullscreenButton.setImageResource(getShrinkImageRes());

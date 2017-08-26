@@ -531,7 +531,8 @@ public class GSYVideoOptionBuilder {
         gsyVideoPlayer.setShowPauseCover(mShowPauseCover);
         gsyVideoPlayer.setSeekRatio(mSeekRatio);
         gsyVideoPlayer.setRotateWithSystem(mRotateWithSystem);
-        gsyVideoPlayer.setUp(mUrl, mCacheWithPlay, mCachePath, mMapHeadData, mVideoTitle);
+        gsyVideoPlayer.setTitle(mVideoTitle);
+        gsyVideoPlayer.setUp(mUrl, mCacheWithPlay, mCachePath, mMapHeadData);
     }
 
 }

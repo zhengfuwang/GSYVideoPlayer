@@ -137,8 +137,8 @@ public class ListVideoUtil {
         gsyVideoPlayer.setNeedShowWifiTip(needShowWifiTip);
 
         gsyVideoPlayer.setNeedLockFull(needLockFull);
-
-        gsyVideoPlayer.setUp(url, true, cachePath, mapHeadData, mTitle);
+        gsyVideoPlayer.setTitle(mTitle);
+        gsyVideoPlayer.setUp(url, true, cachePath, mapHeadData);
 
         if(!TextUtils.isEmpty(mTitle)) {
             gsyVideoPlayer.getTitleTextView().setText(mTitle);

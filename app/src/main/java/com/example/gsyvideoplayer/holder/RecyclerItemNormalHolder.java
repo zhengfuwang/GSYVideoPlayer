@@ -57,8 +57,10 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
 
         final String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
 
+        gsyVideoPlayer.setTitle("这是title");
+
         //默认缓存路径
-        gsyVideoPlayer.setUp(url, true , null, "这是title");
+        gsyVideoPlayer.setUp(url, true , null);
 
         //增加title
         gsyVideoPlayer.getTitleTextView().setVisibility(View.GONE);
@@ -78,37 +80,9 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
         gsyVideoPlayer.setPlayTag(TAG);
         gsyVideoPlayer.setShowFullAnimation(true);
         //循环
-        //gsyVideoPlayer.setLooping(true);
+        gsyVideoPlayer.setLooping(true);
         gsyVideoPlayer.setNeedLockFull(true);
-
-        //gsyVideoPlayer.setSpeed(2);
-
         gsyVideoPlayer.setPlayPosition(position);
-
-        gsyVideoPlayer.setStandardVideoAllCallBack(new SampleListener(){
-            @Override
-            public void onPrepared(String url, Object... objects) {
-                super.onPrepared(url, objects);
-                if (!gsyVideoPlayer.isIfCurrentIsFullscreen()) {
-                    //静音
-                    GSYVideoManager.instance().setNeedMute(true);
-                }
-
-            }
-
-            @Override
-            public void onQuitFullscreen(String url, Object... objects) {
-                super.onQuitFullscreen(url, objects);
-                //全屏不静音
-                GSYVideoManager.instance().setNeedMute(true);
-            }
-
-            @Override
-            public void onEnterFullscreen(String url, Object... objects) {
-                super.onEnterFullscreen(url, objects);
-                GSYVideoManager.instance().setNeedMute(false);
-            }
-        });
     }
 
     /**

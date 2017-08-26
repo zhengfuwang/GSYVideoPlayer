@@ -198,7 +198,8 @@ public class SampleVideo extends StandardGSYVideoPlayer {
      */
     public boolean setUp(List<SwitchVideoModel> url, boolean cacheWithPlay, String title) {
         mUrlList = url;
-        return setUp(url.get(mSourcePosition).getUrl(), cacheWithPlay, title);
+        setTitle(title);
+        return setUp(url.get(mSourcePosition).getUrl(), cacheWithPlay);
     }
 
     /**
@@ -212,7 +213,8 @@ public class SampleVideo extends StandardGSYVideoPlayer {
      */
     public boolean setUp(List<SwitchVideoModel> url, boolean cacheWithPlay, File cachePath, String title) {
         mUrlList = url;
-        return setUp(url.get(mSourcePosition).getUrl(), cacheWithPlay, cachePath, title);
+        setTitle(title);
+        return setUp(url.get(mSourcePosition).getUrl(), cacheWithPlay, cachePath);
     }
 
     @Override
@@ -341,7 +343,8 @@ public class SampleVideo extends StandardGSYVideoPlayer {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                setUp(url, mCache, mCachePath, mTitle);
+                                setTitle(mTitle);
+                                setUp(url, mCache, mCachePath);
                                 setSeekOnStart(currentPosition);
                                 startPlayLogic();
                                 cancelProgressTimer();

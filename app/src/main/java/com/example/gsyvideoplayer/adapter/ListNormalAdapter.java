@@ -87,7 +87,8 @@ public class ListNormalAdapter extends BaseAdapter {
         //final String url = "http://111.198.24.133:83/yyy_login_server/pic/YB059284/97778276040859/1.mp4";
 
         //默认缓存路径
-        holder.gsyVideoPlayer.setUp(url, true, null, "这是title");
+        holder.gsyVideoPlayer.setTitle("这是title");
+        holder.gsyVideoPlayer.setUp(url, true, null);
 
         //holder.gsyVideoPlayer.setNeedShowWifiTip(false);
 

@@ -46,7 +46,7 @@ public class PlayEmptyControlActivity extends AppCompatActivity {
     private void init() {
         String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
 
-        videoPlayer.setUp(url, true, "");
+        videoPlayer.setUp(url, true);
 
         //过渡动画
         initTransition();
