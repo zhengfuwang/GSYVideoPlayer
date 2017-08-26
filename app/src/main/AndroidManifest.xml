@@ -87,6 +87,7 @@
             android:name=".DetailControlActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
+        <service android:name=".service.VideoUrlParserService"/>
     </application>
 
 </manifest>

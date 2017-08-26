@@ -2,8 +2,15 @@ package com.example.gsyvideoplayer;
 
 import android.app.Application;
 
+import com.blankj.utilcode.util.Utils;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 //import com.squareup.leakcanary.LeakCanary;
 
@@ -23,8 +30,16 @@ public class GSYApplication extends Application {
         //}
         //LeakCanary.install(this);
         //GSYVideoType.enableMediaCodec();
-        //GSYVideoManager.instance().setVideoType(this, GSYVideoType.IJKEXOPLAYER);
+
+        List<VideoOptionModel> videoOptionModels = new ArrayList<>();
+        videoOptionModels.add(new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "protocol_whitelist",
+                "rtmp,concat,ffconcat,file,subfile,http,https,tls,rtp,tcp,udp,crypto"));
+        videoOptionModels.add(new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "safe", 0));
+        GSYVideoManager.instance().setOptionModelList(videoOptionModels);
+
         //GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL);
         //GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_FULL);
+
+        Utils.init(this);
     }
 }

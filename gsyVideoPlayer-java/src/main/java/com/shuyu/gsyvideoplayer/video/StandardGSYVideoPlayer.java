@@ -523,10 +523,10 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         updateStartImage();
     }
 
-    /**
-     * 显示封面
-     */
-    public void showThumbImageView() {
+    @Override
+    public void setThumbImageView(View view) {
+        super.setThumbImageView(view);
+        // 设置完封面后显示封面
         if (mThumbImageView != null && mThumbImageViewLayout != null) {
             setViewShowState(mThumbImageViewLayout, VISIBLE);
         }

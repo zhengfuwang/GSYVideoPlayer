@@ -393,9 +393,6 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      * @return
      */
     public boolean setUp(String url, boolean cacheWithPlay, File cachePath) {
-        if (TextUtils.isEmpty(url)) {
-            return false;
-        }
         mCache = cacheWithPlay;
         mCachePath = cachePath;
         mOriginUrl = url;
@@ -538,9 +535,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     public void onCompletion() {
         //make me normal first
         setStateAndUi(CURRENT_STATE_NORMAL);
-
         mSaveChangeViewTIme = 0;
-
         if (mTextureViewContainer.getChildCount() > 0) {
             mTextureViewContainer.removeAllViews();
         }

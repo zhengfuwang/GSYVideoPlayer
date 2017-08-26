@@ -1,14 +1,19 @@
 package com.example.gsyvideoplayer.holder;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.blankj.utilcode.util.LogUtils;
+import com.bumptech.glide.Glide;
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.model.VideoModel;
+import com.example.gsyvideoplayer.service.VideoUrlParserService;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
@@ -38,32 +43,32 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
         imageView = new ImageView(context);
     }
 
-    public void onBind(final int position, VideoModel videoModel) {
+    public void onBind(final int position, final VideoModel videoModel) {
 
         //增加封面
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        if (position % 2 == 0) {
-            imageView.setImageResource(R.mipmap.xxx1);
-        } else {
-            imageView.setImageResource(R.mipmap.xxx2);
-        }
         if (imageView.getParent() != null) {
             ViewGroup viewGroup = (ViewGroup)imageView.getParent();
             viewGroup.removeView(imageView);
         }
-
-        gsyVideoPlayer.setIsTouchWiget(false);
+        String coverImageUrl = null;
+        if (videoModel.imgs != null && videoModel.imgs.size() > 0) {
+            coverImageUrl = videoModel.imgs.get(0).small_img;
+            LogUtils.e(coverImageUrl);
+        }
+        Glide.with(imageView.getContext())
+                .load("https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=4078627915,1555440430&fm=173&s=B41078339387754350DD00DF0100C0A2&w=218&h=146&img.JPEG")
+                .placeholder(Color.GRAY)
+                .error(Color.GRAY)
+                .crossFade()
+                .into(imageView);
 
         gsyVideoPlayer.setThumbImageView(imageView);
-        // 未设置setup方法时可调用此方法显示封面
-        gsyVideoPlayer.showThumbImageView();
 
-        final String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
-
-        gsyVideoPlayer.setTitle("这是title");
-
+        gsyVideoPlayer.setIsTouchWiget(false);
+        gsyVideoPlayer.setTitle(videoModel.title);
         //默认缓存路径
-        // gsyVideoPlayer.setUp(url, true , null);
+        gsyVideoPlayer.setUp("", true , null);
 
         //设置返回键
         gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
@@ -79,6 +84,7 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
         gsyVideoPlayer.setLockLand(true);
         gsyVideoPlayer.setPlayTag(TAG);
         gsyVideoPlayer.setShowFullAnimation(true);
+        gsyVideoPlayer.setNeedShowWifiTip(true);
         //循环
         gsyVideoPlayer.setLooping(false);
         gsyVideoPlayer.setNeedLockFull(true);
@@ -90,7 +96,8 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
                 gsyVideoPlayer.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        gsyVideoPlayer.startWithSetUp(url, true , null);
+                        VideoUrlParserService.start(gsyVideoPlayer.getContext(),
+                                videoModel.media_source, videoModel.media_vid);
                     }
                 }, 3000);
                 return true;

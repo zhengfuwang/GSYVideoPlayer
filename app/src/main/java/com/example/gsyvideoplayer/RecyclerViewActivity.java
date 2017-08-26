@@ -1,9 +1,11 @@
 package com.example.gsyvideoplayer;
 
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,15 +19,27 @@ import com.example.gsyvideoplayer.adapter.RecyclerNormalAdapter;
 
 import com.example.gsyvideoplayer.holder.RecyclerItemNormalHolder;
 import com.example.gsyvideoplayer.model.VideoModel;
+import com.example.gsyvideoplayer.service.VideoUrlParserService;
+import com.example.gsyvideoplayer.utils.VideoUtils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class RecyclerViewActivity extends AppCompatActivity {
 
@@ -35,7 +49,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
     LinearLayoutManager linearLayoutManager;
 
-    RecyclerBaseAdapter recyclerBaseAdapter;
+    RecyclerNormalAdapter recyclerBaseAdapter;
 
     List<VideoModel> dataList = new ArrayList<>();
 
@@ -53,17 +67,12 @@ public class RecyclerViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recycler_view);
         ButterKnife.bind(this);
 
-        resolveData();
-
-        final RecyclerNormalAdapter recyclerNormalAdapter = new RecyclerNormalAdapter(this, dataList);
+        recyclerBaseAdapter = new RecyclerNormalAdapter(this, dataList);
         linearLayoutManager = new LinearLayoutManager(this);
         videoList.setLayoutManager(linearLayoutManager);
-        videoList.setAdapter(recyclerNormalAdapter);
-
+        videoList.setAdapter(recyclerBaseAdapter);
         videoList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
             int firstVisibleItem, lastVisibleItem;
-
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -93,7 +102,45 @@ public class RecyclerViewActivity extends AppCompatActivity {
                 }
             }
         });
+        initData();
+    }
 
+    private void initData() {
+
+        Observable.create(new ObservableOnSubscribe<ArrayList<VideoModel>>() {
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<ArrayList<VideoModel>> subscribe) {
+                try {
+                    InputStream is = getAssets().open("videodata.txt");
+                    ArrayList<VideoModel> datas = new Gson().fromJson(VideoUtils.readTextFromInputStream(is),
+                            new TypeToken<ArrayList<VideoModel>>(){}.getType());
+                    subscribe.onNext(datas);
+                    subscribe.onComplete();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    subscribe.onError(e);
+                }
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ArrayList<VideoModel>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ArrayList<VideoModel> videoModels) {
+                        resolveData(videoModels);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
     }
 
     @Override
@@ -132,16 +179,14 @@ public class RecyclerViewActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         GSYVideoPlayer.releaseAllVideos();
+        // 停止视频地址解析服务
+        Intent parserServiceIntent = new Intent(this, VideoUrlParserService.class);
+        stopService(parserServiceIntent);
     }
 
-
-    private void resolveData() {
-        for (int i = 0; i < 19; i++) {
-            VideoModel videoModel = new VideoModel();
-            dataList.add(videoModel);
-        }
+    private void resolveData(ArrayList<VideoModel> videoModels) {
+        dataList.addAll(videoModels);
         if (recyclerBaseAdapter != null)
             recyclerBaseAdapter.notifyDataSetChanged();
     }
-
 }

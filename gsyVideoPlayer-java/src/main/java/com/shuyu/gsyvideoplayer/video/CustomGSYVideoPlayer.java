@@ -5,6 +5,7 @@ import android.graphics.SurfaceTexture;
 import android.util.AttributeSet;
 import android.view.Surface;
 import android.view.TextureView;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;

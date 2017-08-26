@@ -534,8 +534,9 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
      * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
      * @return
      */
+    @Override
     public void startWithSetUp(String url, boolean cacheWithPlay, File cachePath) {
-        if (setUp(url, cacheWithPlay, cachePath)) {
+        if (isCurrentMediaListener() && setUp(url, cacheWithPlay, cachePath)) {
             clickStartIcon();
         } else {
             Log.e(getClass().getName(), "startWithSetUp() Failed !");
@@ -865,9 +866,6 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         if (mProgressBar == null || mTotalTimeTextView == null || mCurrentTimeTextView == null) {
             return;
         }
-        setViewShowState(mProgressBar, VISIBLE);
-        setViewShowState(mTotalTimeTextView, VISIBLE);
-        setViewShowState(mCurrentTimeTextView, VISIBLE);
 
         mProgressBar.setProgress(0);
         mProgressBar.setSecondaryProgress(0);
