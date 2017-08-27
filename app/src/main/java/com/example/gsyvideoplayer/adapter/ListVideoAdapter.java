@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.VideoModel;
 import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
+import com.shuyu.gsyvideoplayer.model.VideoPlayModel;
 import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.ListVideoUtil;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
@@ -92,7 +93,10 @@ public class ListVideoAdapter extends BaseAdapter {
                 final String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
                 listVideoUtil.setTitle("title " + position);
                 //listVideoUtil.setCachePath(new File(FileUtils.getPath()));
-                listVideoUtil.startPlay(url);
+
+                VideoPlayModel videoPlayModel = new VideoPlayModel();
+                videoPlayModel.setVideoUrl(url);
+                listVideoUtil.startPlay(videoPlayModel);
 
                 //必须在startPlay之后设置才能生效
                 //listVideoUtil.getGsyVideoPlayer().getTitleTextView().setVisibility(View.VISIBLE);

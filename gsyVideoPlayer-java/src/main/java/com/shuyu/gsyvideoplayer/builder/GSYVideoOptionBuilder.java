@@ -6,6 +6,7 @@ import android.view.View;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
 import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
+import com.shuyu.gsyvideoplayer.model.VideoPlayModel;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
@@ -96,8 +97,8 @@ public class GSYVideoOptionBuilder {
     //播放的tag，防止错误，因为普通的url也可能重复
     protected String mPlayTag = "";
 
-    //播放url
-    protected String mUrl;
+    //播放参数
+    protected VideoPlayModel mVideoPlayModel;
 
     //视频title
     protected String mVideoTitle = null;
@@ -320,10 +321,10 @@ public class GSYVideoOptionBuilder {
     /**
      * 播放url
      *
-     * @param url
+     * @param videoPlayModel
      */
-    public GSYVideoOptionBuilder setUrl(String url) {
-        this.mUrl = url;
+    public GSYVideoOptionBuilder setVideoPlayModel(VideoPlayModel videoPlayModel) {
+        this.mVideoPlayModel = videoPlayModel;
         return this;
     }
 
@@ -532,7 +533,7 @@ public class GSYVideoOptionBuilder {
         gsyVideoPlayer.setSeekRatio(mSeekRatio);
         gsyVideoPlayer.setRotateWithSystem(mRotateWithSystem);
         gsyVideoPlayer.setTitle(mVideoTitle);
-        gsyVideoPlayer.setUp(mUrl, mCacheWithPlay, mCachePath, mMapHeadData);
+        gsyVideoPlayer.setUp(mVideoPlayModel, mCacheWithPlay, mCachePath, mMapHeadData);
     }
 
 }

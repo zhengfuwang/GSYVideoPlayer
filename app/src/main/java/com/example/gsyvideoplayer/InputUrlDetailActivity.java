@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.video.LandLayoutVideo;
 import com.example.gsyvideoplayer.view.CustomInputDialog;
+import com.shuyu.gsyvideoplayer.model.VideoPlayModel;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
@@ -42,7 +43,7 @@ public class InputUrlDetailActivity extends AppCompatActivity {
     private boolean isPlay;
     private boolean isPause;
     private boolean cache;
-    private String url;
+    private VideoPlayModel videoPlayModel;
 
     private OrientationUtils orientationUtils;
 
@@ -52,9 +53,11 @@ public class InputUrlDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_input_url_detail);
         ButterKnife.bind(this);
 
-        url = "http://baobab.wdjcdn.com/14564977406580.mp4";
         detailPlayer.setTitle("测试视频");
-        detailPlayer.setUp(url, cache, null);
+
+        videoPlayModel = new VideoPlayModel();
+        videoPlayModel.setVideoUrl("http://baobab.wdjcdn.com/14564977406580.mp4");
+        detailPlayer.setUp(videoPlayModel, cache, null);
 
 
         //增加封面
@@ -92,7 +95,7 @@ public class InputUrlDetailActivity extends AppCompatActivity {
 
         detailPlayer.setStandardVideoAllCallBack(new SampleListener() {
             @Override
-            public void onPrepared(String url, Object... objects) {
+            public void onPrepared(VideoPlayModel url, Object... objects) {
                 super.onPrepared(url, objects);
                 //开始播放了才能旋转和全屏
                 orientationUtils.setEnable(true);
@@ -100,17 +103,17 @@ public class InputUrlDetailActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onAutoComplete(String url, Object... objects) {
+            public void onAutoComplete(VideoPlayModel url, Object... objects) {
                 super.onAutoComplete(url, objects);
             }
 
             @Override
-            public void onClickStartError(String url, Object... objects) {
+            public void onClickStartError(VideoPlayModel url, Object... objects) {
                 super.onClickStartError(url, objects);
             }
 
             @Override
-            public void onQuitFullscreen(String url, Object... objects) {
+            public void onQuitFullscreen(VideoPlayModel url, Object... objects) {
                 super.onQuitFullscreen(url, objects);
                 if (orientationUtils != null) {
                     orientationUtils.backToProtVideo();
@@ -196,7 +199,7 @@ public class InputUrlDetailActivity extends AppCompatActivity {
     private void playVideo() {
         detailPlayer.release();
         detailPlayer.setTitle("测试视频");
-        detailPlayer.setUp(url, cache, null);
+        detailPlayer.setUp(videoPlayModel, cache, null);
         detailPlayer.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -215,19 +218,19 @@ public class InputUrlDetailActivity extends AppCompatActivity {
 
     private void showInputDialog() {
         final CustomInputDialog customInputDialog = new CustomInputDialog(this);
-        customInputDialog.setInput(url);
+        customInputDialog.setInput(videoPlayModel.getVideoUrl());
         customInputDialog.setCache(cache);
         customInputDialog.setTitle("请输入URL");
         customInputDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new CustomInputDialog.OnClickListener() {
             @Override
             public void onInputChanged(String input, boolean cache) {
-                url = input;
+                videoPlayModel.setVideoUrl(input);
                 InputUrlDetailActivity.this.cache = cache;
             }
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                url = customInputDialog.getEditMessage().getText().toString();
+                videoPlayModel.setVideoUrl(customInputDialog.getEditMessage().getText().toString());
                 playVideo();
             }
         });

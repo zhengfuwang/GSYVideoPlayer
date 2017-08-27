@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.listener.SampleListener;
+import com.shuyu.gsyvideoplayer.model.VideoPlayModel;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.model.GSYVideoModel;
@@ -89,7 +90,7 @@ public class DetailListPlayer extends AppCompatActivity {
 
         detailPlayer.setStandardVideoAllCallBack(new SampleListener() {
             @Override
-            public void onPrepared(String url, Object... objects) {
+            public void onPrepared(VideoPlayModel url, Object... objects) {
                 super.onPrepared(url, objects);
                 //开始播放了才能旋转和全屏
                 orientationUtils.setEnable(true);
@@ -97,17 +98,17 @@ public class DetailListPlayer extends AppCompatActivity {
             }
 
             @Override
-            public void onAutoComplete(String url, Object... objects) {
+            public void onAutoComplete(VideoPlayModel url, Object... objects) {
                 super.onAutoComplete(url, objects);
             }
 
             @Override
-            public void onClickStartError(String url, Object... objects) {
+            public void onClickStartError(VideoPlayModel url, Object... objects) {
                 super.onClickStartError(url, objects);
             }
 
             @Override
-            public void onQuitFullscreen(String url, Object... objects) {
+            public void onQuitFullscreen(VideoPlayModel url, Object... objects) {
                 super.onQuitFullscreen(url, objects);
                 if (orientationUtils != null) {
                     orientationUtils.backToProtVideo();

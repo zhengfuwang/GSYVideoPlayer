@@ -1,5 +1,7 @@
 package com.shuyu.gsyvideoplayer.listener;
 
+import com.shuyu.gsyvideoplayer.model.VideoPlayModel;
+
 import java.io.File;
 
 public interface GSYMediaPlayerListener {
@@ -25,5 +27,5 @@ public interface GSYMediaPlayerListener {
 
     void onVideoResume();
 
-    void startWithSetUp(String url, boolean cacheWithPlay, File cachePath);
+    void startWithSetUp(VideoPlayModel videoPlayModel, boolean cacheWithPlay, File cachePath);
 }

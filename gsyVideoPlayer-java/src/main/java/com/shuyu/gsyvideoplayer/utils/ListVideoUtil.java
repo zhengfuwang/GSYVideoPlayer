@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.shuyu.gsyvideoplayer.model.VideoPlayModel;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
@@ -40,7 +41,7 @@ public class ListVideoUtil {
     private ViewGroup.LayoutParams listParams;
     private OrientationUtils orientationUtils;
     private StandardVideoAllCallBack videoAllCallBack;
-    private String url;
+    private VideoPlayModel mVideoPlayModel;
     private Context context;
     private File cachePath;
 
@@ -118,15 +119,15 @@ public class ListVideoUtil {
     /**
      * 开始播放
      *
-     * @param url 播放的URL
+     * @param videoPlayModel 播放参数
      */
-    public void startPlay(String url) {
+    public void startPlay(VideoPlayModel videoPlayModel) {
 
         if (isSmall()) {
             smallVideoToNormal();
         }
 
-        this.url = url;
+        this.mVideoPlayModel = videoPlayModel;
 
         gsyVideoPlayer.release();
 
@@ -138,7 +139,7 @@ public class ListVideoUtil {
 
         gsyVideoPlayer.setNeedLockFull(needLockFull);
         gsyVideoPlayer.setTitle(mTitle);
-        gsyVideoPlayer.setUp(url, true, cachePath, mapHeadData);
+        gsyVideoPlayer.setUp(videoPlayModel, true, cachePath, mapHeadData);
 
         if(!TextUtils.isEmpty(mTitle)) {
             gsyVideoPlayer.getTitleTextView().setText(mTitle);
@@ -284,7 +285,7 @@ public class ListVideoUtil {
                 gsyVideoPlayer.setIfCurrentIsFullscreen(false);
                 if (videoAllCallBack != null) {
                     Debuger.printfLog("onQuitFullscreen");
-                    videoAllCallBack.onQuitFullscreen(url, mTitle, gsyVideoPlayer);
+                    videoAllCallBack.onQuitFullscreen(mVideoPlayModel, mTitle, gsyVideoPlayer);
                 }
                 if (hideKey) {
                     showNavKey(context, systemUiVisibility);
@@ -343,7 +344,7 @@ public class ListVideoUtil {
         gsyVideoPlayer.setIfCurrentIsFullscreen(true);
         if (videoAllCallBack != null) {
             Debuger.printfLog("onEnterFullscreen");
-            videoAllCallBack.onEnterFullscreen(this.url, mTitle, gsyVideoPlayer);
+            videoAllCallBack.onEnterFullscreen(this.mVideoPlayModel, mTitle, gsyVideoPlayer);
         }
     }
 

@@ -202,7 +202,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         to.mNetSate = from.mNetSate;
         to.mRotateWithSystem = from.mRotateWithSystem;
         to.setTitle(from.mTitle);
-        to.setUp(from.mOriginUrl, from.mCache, from.mCachePath, from.mMapHeadData);
+        to.setUp(from.mVideoPlayModel, from.mCache, from.mCachePath, from.mMapHeadData);
         to.setStateAndUi(from.mCurrentState);
     }
 
@@ -282,7 +282,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
 
         if (mVideoAllCallBack != null) {
             Debuger.printfError("onEnterFullscreen");
-            mVideoAllCallBack.onEnterFullscreen(mOriginUrl, mTitle, gsyVideoPlayer);
+            mVideoAllCallBack.onEnterFullscreen(mVideoPlayModel, mTitle, gsyVideoPlayer);
         }
         mIfCurrentIsFullscreen = true;
     }
@@ -307,7 +307,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         mSaveChangeViewTIme = System.currentTimeMillis();
         if (mVideoAllCallBack != null) {
             Debuger.printfError("onQuitFullscreen");
-            mVideoAllCallBack.onQuitFullscreen(mOriginUrl, mTitle, this);
+            mVideoAllCallBack.onQuitFullscreen(mVideoPlayModel, mTitle, this);
         }
         mIfCurrentIsFullscreen = false;
         if (mHideKey) {
@@ -569,7 +569,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
             GSYVideoManager.instance().setListener(gsyVideoPlayer);
             if (mVideoAllCallBack != null) {
                 Debuger.printfError("onEnterSmallWidget");
-                mVideoAllCallBack.onEnterSmallWidget(mOriginUrl, mTitle, gsyVideoPlayer);
+                mVideoAllCallBack.onEnterSmallWidget(mVideoPlayModel, mTitle, gsyVideoPlayer);
             }
 
             return gsyVideoPlayer;
@@ -598,7 +598,7 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         mSaveChangeViewTIme = System.currentTimeMillis();
         if (mVideoAllCallBack != null) {
             Debuger.printfLog("onQuitSmallWidget");
-            mVideoAllCallBack.onQuitSmallWidget(mOriginUrl, mTitle, this);
+            mVideoAllCallBack.onQuitSmallWidget(mVideoPlayModel, mTitle, this);
         }
     }
 

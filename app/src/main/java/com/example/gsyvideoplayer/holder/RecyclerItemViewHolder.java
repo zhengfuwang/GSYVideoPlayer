@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.adapter.ListVideoAdapter;
 import com.example.gsyvideoplayer.model.VideoModel;
+import com.shuyu.gsyvideoplayer.model.VideoPlayModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,7 +36,7 @@ public class RecyclerItemViewHolder extends RecyclerItemBaseHolder {
         imageView = new ImageView(context);
     }
 
-    public void onBind(final int position, VideoModel videoModel) {
+    public void onBind(final int position, final VideoModel videoModel) {
 
         //增加封面
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -57,7 +58,10 @@ public class RecyclerItemViewHolder extends RecyclerItemBaseHolder {
                     url = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
                 }
                 //listVideoUtil.setCachePath(new File(FileUtils.getPath()));
-                listVideoUtil.startPlay(url);
+
+                VideoPlayModel videoPlayModel = new VideoPlayModel();
+                videoPlayModel.setVideoUrl(url);
+                listVideoUtil.startPlay(videoPlayModel);
 
                 //必须在startPlay之后设置才能生效
                 //listVideoUtil.getGsyVideoPlayer().getTitleTextView().setVisibility(View.VISIBLE);

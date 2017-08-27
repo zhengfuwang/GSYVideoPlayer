@@ -24,6 +24,7 @@ import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener;
 import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
+import com.shuyu.gsyvideoplayer.model.VideoPlayModel;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.NetInfoModule;
@@ -136,7 +137,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     protected Context mContext;
 
     //原来的url
-    protected String mOriginUrl;
+    protected VideoPlayModel mVideoPlayModel;
 
     //转化后的URL
     protected String mUrl;
@@ -284,10 +285,10 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     protected void startButtonLogic() {
         if (mVideoAllCallBack != null && mCurrentState == CURRENT_STATE_NORMAL) {
             Debuger.printfLog("onClickStartIcon");
-            mVideoAllCallBack.onClickStartIcon(mOriginUrl, mTitle, this);
+            mVideoAllCallBack.onClickStartIcon(mVideoPlayModel, mTitle, this);
         } else if (mVideoAllCallBack != null) {
             Debuger.printfLog("onClickStartError");
-            mVideoAllCallBack.onClickStartError(mOriginUrl, mTitle, this);
+            mVideoAllCallBack.onClickStartError(mVideoPlayModel, mTitle, this);
         }
         prepareVideo();
     }
@@ -356,26 +357,26 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     /**
      * 设置播放URL
      *
-     * @param url           播放url
-     * @param cacheWithPlay 是否边播边缓存
+     * @param videoPlayModel 视频播放参数
+     * @param cacheWithPlay  是否边播边缓存
      * @return
      */
-    public boolean setUp(String url, boolean cacheWithPlay) {
-        return setUp(url, cacheWithPlay, ((File) null));
+    public boolean setUp(VideoPlayModel videoPlayModel, boolean cacheWithPlay) {
+        return setUp(videoPlayModel, cacheWithPlay, ((File) null));
     }
 
 
     /**
      * 设置播放URL
      *
-     * @param url           播放url
-     * @param cacheWithPlay 是否边播边缓存
-     * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
-     * @param mapHeadData   头部信息
+     * @param videoPlayModel  videoPlayModel 视频播放参数
+     * @param cacheWithPlay   是否边播边缓存
+     * @param cachePath       缓存路径，如果是M3U8或者HLS，请设置为false
+     * @param mapHeadData     头部信息
      * @return
      */
-    public boolean setUp(String url, boolean cacheWithPlay, File cachePath, Map<String, String> mapHeadData) {
-        if (setUp(url, cacheWithPlay, cachePath)) {
+    public boolean setUp(VideoPlayModel videoPlayModel, boolean cacheWithPlay, File cachePath, Map<String, String> mapHeadData) {
+        if (setUp(videoPlayModel, cacheWithPlay, cachePath)) {
             this.mMapHeadData.clear();
             if (mapHeadData != null)
                 this.mMapHeadData.putAll(mapHeadData);
@@ -387,15 +388,19 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     /**
      * 设置播放URL
      *
-     * @param url           播放url
-     * @param cacheWithPlay 是否边播边缓存
-     * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
+     * @param videoPlayModel 视频播放参数
+     * @param cacheWithPlay  是否边播边缓存
+     * @param cachePath      缓存路径，如果是M3U8或者HLS，请设置为false
      * @return
      */
-    public boolean setUp(String url, boolean cacheWithPlay, File cachePath) {
+    public boolean setUp(VideoPlayModel videoPlayModel, boolean cacheWithPlay, File cachePath) {
+        if (videoPlayModel == null) {
+            videoPlayModel = new VideoPlayModel();
+        }
+        String url = videoPlayModel.getVideoUrl();
         mCache = cacheWithPlay;
         mCachePath = cachePath;
-        mOriginUrl = url;
+        mVideoPlayModel = videoPlayModel;
         if (isCurrentMediaListener() &&
                 (System.currentTimeMillis() - mSaveChangeViewTIme) < CHANGE_DELAY_TIME)
             return false;
@@ -407,7 +412,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
             mCacheFile = (!url.startsWith("http"));
             //注册上缓冲监听
             if (!mCacheFile && GSYVideoManager.instance() != null) {
-                proxy.registerCacheListener(GSYVideoManager.instance(), mOriginUrl);
+                proxy.registerCacheListener(GSYVideoManager.instance(), url);
             }
         } else if (!cacheWithPlay && (!url.startsWith("http") && !url.startsWith("rtmp")
                 && !url.startsWith("rtsp") && !url.contains(".m3u8"))) {
@@ -478,7 +483,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     protected void deleteCacheFileWhenError() {
         clearCurrentCache();
         Debuger.printfError("Link Or mCache Error, Please Try Again" + mUrl);
-        mUrl = mOriginUrl;
+        mUrl = mVideoPlayModel.getVideoUrl();
     }
 
     @Override
@@ -493,7 +498,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
 
         if (mVideoAllCallBack != null && isCurrentMediaListener()) {
             Debuger.printfLog("onPrepared");
-            mVideoAllCallBack.onPrepared(mOriginUrl, mTitle, this);
+            mVideoAllCallBack.onPrepared(mVideoPlayModel, mTitle, this);
         }
 
         if (GSYVideoManager.instance().getMediaPlayer() != null && mSeekOnStart > 0) {
@@ -527,7 +532,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
 
         if (mVideoAllCallBack != null && isCurrentMediaListener()) {
             Debuger.printfLog("onAutoComplete");
-            mVideoAllCallBack.onAutoComplete(mOriginUrl, mTitle, this);
+            mVideoAllCallBack.onAutoComplete(mVideoPlayModel, mTitle, this);
         }
     }
 
@@ -566,7 +571,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
             mNetChanged = false;
             netWorkErrorLogic();
             if (mVideoAllCallBack != null) {
-                mVideoAllCallBack.onPlayError(mOriginUrl, mTitle, this);
+                mVideoAllCallBack.onPlayError(mVideoPlayModel, mTitle, this);
             }
             return;
         }
@@ -575,7 +580,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
             setStateAndUi(CURRENT_STATE_ERROR);
             deleteCacheFileWhenError();
             if (mVideoAllCallBack != null) {
-                mVideoAllCallBack.onPlayError(mOriginUrl, mTitle, this);
+                mVideoAllCallBack.onPlayError(mVideoPlayModel, mTitle, this);
             }
         }
     }
@@ -622,11 +627,11 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
             Debuger.printfError(" mCacheFile Local Error " + mUrl);
             //可能是因为缓存文件除了问题
             CommonUtil.deleteFile(mUrl.replace("file://", ""));
-            mUrl = mOriginUrl;
+            mUrl = mVideoPlayModel.getVideoUrl();
         } else if (mUrl.contains("127.0.0.1")) {
             //是否为缓存了未完成的文件
             Md5FileNameGenerator md5FileNameGenerator = new Md5FileNameGenerator();
-            String name = md5FileNameGenerator.generate(mOriginUrl);
+            String name = md5FileNameGenerator.generate(mVideoPlayModel.getVideoUrl());
             if (mCachePath != null) {
                 String path = mCachePath.getAbsolutePath() + File.separator + name + ".download";
                 CommonUtil.deleteFile(path);

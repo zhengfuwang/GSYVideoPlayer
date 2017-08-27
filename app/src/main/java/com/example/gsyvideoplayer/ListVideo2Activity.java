@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.adapter.ListVideoAdapter;
 import com.example.gsyvideoplayer.listener.SampleListener;
+import com.shuyu.gsyvideoplayer.model.VideoPlayModel;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
@@ -96,13 +97,13 @@ public class ListVideo2Activity extends AppCompatActivity {
         //小窗口关闭被点击的时候回调处理回复页面
         listVideoUtil.setVideoAllCallBack(new SampleListener(){
             @Override
-            public void onPrepared(String url, Object... objects) {
+            public void onPrepared(VideoPlayModel url, Object... objects) {
                 super.onPrepared(url, objects);
                 Debuger.printfLog("Duration " + listVideoUtil.getDuration() + " CurrentPosition " + listVideoUtil.getCurrentPositionWhenPlaying());
             }
 
             @Override
-            public void onQuitSmallWidget(String url, Object... objects) {
+            public void onQuitSmallWidget(VideoPlayModel url, Object... objects) {
                 super.onQuitSmallWidget(url, objects);
                 //大于0说明有播放,//对应的播放列表TAG
                 if (listVideoUtil.getPlayPosition() >= 0 && listVideoUtil.getPlayTAG().equals(ListVideoAdapter.TAG)) {

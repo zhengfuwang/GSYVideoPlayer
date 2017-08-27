@@ -68,7 +68,7 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
         gsyVideoPlayer.setIsTouchWiget(false);
         gsyVideoPlayer.setTitle(videoModel.title);
         //默认缓存路径
-        gsyVideoPlayer.setUp("", true , null);
+        gsyVideoPlayer.setUp(null, true , null);
 
         //设置返回键
         gsyVideoPlayer.getBackButton().setVisibility(View.GONE);

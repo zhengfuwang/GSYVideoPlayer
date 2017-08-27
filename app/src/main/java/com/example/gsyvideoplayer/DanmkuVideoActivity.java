@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.video.DanmakuVideoPlayer;
+import com.shuyu.gsyvideoplayer.model.VideoPlayModel;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
@@ -56,7 +57,10 @@ public class DanmkuVideoActivity extends AppCompatActivity {
         String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
         //String url = "https://res.exexm.com/cw_145225549855002";
         danmakuVideoPlayer.setTitle("测试视频");
-        danmakuVideoPlayer.setUp(url, true, null);
+
+        VideoPlayModel videoPlayModel = new VideoPlayModel();
+        videoPlayModel.setVideoUrl(url);
+        danmakuVideoPlayer.setUp(videoPlayModel, true, null);
 
         //增加封面
         ImageView imageView = new ImageView(this);
@@ -92,7 +96,7 @@ public class DanmkuVideoActivity extends AppCompatActivity {
 
         danmakuVideoPlayer.setStandardVideoAllCallBack(new SampleListener() {
             @Override
-            public void onPrepared(String url, Object... objects) {
+            public void onPrepared(VideoPlayModel url, Object... objects) {
                 super.onPrepared(url, objects);
                 //开始播放了才能旋转和全屏
                 orientationUtils.setEnable(true);
@@ -100,17 +104,17 @@ public class DanmkuVideoActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onAutoComplete(String url, Object... objects) {
+            public void onAutoComplete(VideoPlayModel url, Object... objects) {
                 super.onAutoComplete(url, objects);
             }
 
             @Override
-            public void onClickStartError(String url, Object... objects) {
+            public void onClickStartError(VideoPlayModel url, Object... objects) {
                 super.onClickStartError(url, objects);
             }
 
             @Override
-            public void onQuitFullscreen(String url, Object... objects) {
+            public void onQuitFullscreen(VideoPlayModel url, Object... objects) {
                 super.onQuitFullscreen(url, objects);
                 if (orientationUtils != null) {
                     orientationUtils.backToProtVideo();

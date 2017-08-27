@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.style.URLSpan;
 import android.transition.Transition;
 
 import com.example.gsyvideoplayer.listener.OnTransitionListener;
 import com.example.gsyvideoplayer.video.EmptyControlVideo;
+import com.shuyu.gsyvideoplayer.model.VideoPlayModel;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
@@ -45,8 +47,9 @@ public class PlayEmptyControlActivity extends AppCompatActivity {
 
     private void init() {
         String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
-
-        videoPlayer.setUp(url, true);
+        VideoPlayModel videoPlayModel = new VideoPlayModel();
+        videoPlayModel.setVideoUrl(url);
+        videoPlayer.setUp(videoPlayModel, true);
 
         //过渡动画
         initTransition();

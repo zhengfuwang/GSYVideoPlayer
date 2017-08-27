@@ -8,18 +8,20 @@ public class GSYVideoModel {
 
     private String mUrl;
     private String mTitle;
+    private VideoPlayModel mVideoPlayModel;
 
     public GSYVideoModel(String url, String title) {
         mUrl = url;
         mTitle = title;
+        mVideoPlayModel = new VideoPlayModel("", mUrl);
     }
 
     public String getUrl() {
-        return mUrl;
+        return mVideoPlayModel.getVideoUrl();
     }
 
     public void setUrl(String url) {
-        this.mUrl = url;
+        this.mVideoPlayModel.setVideoUrl(url);
     }
 
     public String getTitle() {
@@ -28,5 +30,9 @@ public class GSYVideoModel {
 
     public void setTitle(String title) {
         this.mTitle = title;
+    }
+
+    public VideoPlayModel getVideoPlayModel() {
+        return mVideoPlayModel;
     }
 }

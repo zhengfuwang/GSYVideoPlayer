@@ -150,8 +150,7 @@ public class VideoUrlParserService extends Service {
                     .flatMap(new Function<String, ObservableSource<VideoPlayModel>>() {
                         @Override
                         public ObservableSource<VideoPlayModel> apply(@NonNull String s) throws Exception {
-                            return Observable.just(new VideoPlayModel(vid, s, VideoUtils.FormetFileSize(fileSize),
-                                    isWifiConnected));
+                            return Observable.just(new VideoPlayModel(vid, s, VideoUtils.FormetFileSize(fileSize)));
                         }
                     })
                     .subscribeOn(Schedulers.io())
@@ -237,7 +236,7 @@ public class VideoUrlParserService extends Service {
     private void calculationVideoLength(final String vId, final String vUrl) {
         // 非移动网络直接播放视频
         if (isWifiConnected) {
-            startPlayVideo(new VideoPlayModel(vId, vUrl, isWifiConnected));
+            startPlayVideo(new VideoPlayModel(vId, vUrl));
             return;
         }
         // 计算视频大小
@@ -281,14 +280,14 @@ public class VideoUrlParserService extends Service {
                     @Override
                     public void onNext(@NonNull String s) {
                         String fileSizeStr = VideoUtils.FormetFileSize(Long.parseLong(s));
-                        startPlayVideo(new VideoPlayModel(vId, vUrl, fileSizeStr, isWifiConnected));
+                        startPlayVideo(new VideoPlayModel(vId, vUrl, fileSizeStr));
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
                         Log.e(TAG, e.toString());
                         // 解析时长失败 继续播放
-                        startPlayVideo(new VideoPlayModel(vId, vUrl, isWifiConnected));
+                        startPlayVideo(new VideoPlayModel(vId, vUrl));
                     }
 
                     @Override
@@ -305,7 +304,7 @@ public class VideoUrlParserService extends Service {
                     @Override
                     public void accept(VideoPlayModel videoPlayModel) throws Exception {
                         if (GSYVideoManager.instance().listener() != null) {
-                            GSYVideoManager.instance().listener().startWithSetUp(videoPlayModel.videoUrl, false , null);
+                            GSYVideoManager.instance().listener().startWithSetUp(videoPlayModel, false , null);
                         }
                     }
                 });

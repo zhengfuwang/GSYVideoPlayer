@@ -11,6 +11,7 @@ import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.model.VideoModel;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.model.VideoPlayModel;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
@@ -88,7 +89,10 @@ public class ListNormalAdapter extends BaseAdapter {
 
         //默认缓存路径
         holder.gsyVideoPlayer.setTitle("这是title");
-        holder.gsyVideoPlayer.setUp(url, true, null);
+
+        VideoPlayModel videoPlayModel = new VideoPlayModel();
+        videoPlayModel.setVideoUrl(url);
+        holder.gsyVideoPlayer.setUp(videoPlayModel, true, null);
 
         //holder.gsyVideoPlayer.setNeedShowWifiTip(false);
 
@@ -153,8 +157,8 @@ public class ListNormalAdapter extends BaseAdapter {
 
         holder.gsyVideoPlayer.setStandardVideoAllCallBack(new SampleListener() {
             @Override
-            public void onPrepared(String url, Object... objects) {
-                super.onPrepared(url, objects);
+            public void onPrepared(VideoPlayModel model, Object... objects) {
+                super.onPrepared(model, objects);
                 Debuger.printfLog("onPrepared");
                 if (!holder.gsyVideoPlayer.isIfCurrentIsFullscreen()) {
                     GSYVideoManager.instance().setNeedMute(true);
@@ -163,14 +167,14 @@ public class ListNormalAdapter extends BaseAdapter {
             }
 
             @Override
-            public void onQuitFullscreen(String url, Object... objects) {
-                super.onQuitFullscreen(url, objects);
+            public void onQuitFullscreen(VideoPlayModel model, Object... objects) {
+                super.onQuitFullscreen(model, objects);
                 GSYVideoManager.instance().setNeedMute(true);
             }
 
             @Override
-            public void onEnterFullscreen(String url, Object... objects) {
-                super.onEnterFullscreen(url, objects);
+            public void onEnterFullscreen(VideoPlayModel model, Object... objects) {
+                super.onEnterFullscreen(model, objects);
                 GSYVideoManager.instance().setNeedMute(false);
             }
         });

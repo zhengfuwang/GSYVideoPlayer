@@ -7,20 +7,28 @@ package com.shuyu.gsyvideoplayer.model;
 public class VideoPlayModel {
 
     public String videoId;
-    public String videoUrl;
+    private String videoUrl;
     public String videoSize;
-    public boolean isWifiConnected;
 
-    public VideoPlayModel(String videoId, String videoUrl, boolean isWifiConnected) {
-        this.videoId = videoId;
-        this.videoUrl = videoUrl;
-        this.isWifiConnected = isWifiConnected;
+    public VideoPlayModel() {
     }
 
-    public VideoPlayModel(String videoId, String videoUrl, String videoSize, boolean isWifiConnected) {
+    public VideoPlayModel(String videoId, String videoUrl) {
+        this.videoId = videoId;
+        this.videoUrl = videoUrl;
+    }
+
+    public VideoPlayModel(String videoId, String videoUrl, String videoSize) {
         this.videoId = videoId;
         this.videoUrl = videoUrl;
         this.videoSize = "0".equals(videoSize) ? null : videoSize;
-        this.isWifiConnected = isWifiConnected;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl == null ? "" : videoUrl;
+    }
+
+    public void setVideoUrl(String url) {
+        this.videoUrl = url;
     }
 }

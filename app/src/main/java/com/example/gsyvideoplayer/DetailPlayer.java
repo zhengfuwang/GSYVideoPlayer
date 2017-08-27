@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 
 import com.example.gsyvideoplayer.listener.SampleListener;
 import com.example.gsyvideoplayer.video.LandLayoutVideo;
+import com.shuyu.gsyvideoplayer.model.VideoPlayModel;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
@@ -50,6 +51,9 @@ public class DetailPlayer extends AppCompatActivity {
 
 
         String url = "http://baobab.wdjcdn.com/14564977406580.mp4";
+
+        VideoPlayModel videoPlayModel = new VideoPlayModel();
+        videoPlayModel.setVideoUrl(url);
 
         //String url = "http://hcjs2ra2rytd8v8np1q.exp.bcevod.com/mda-hegtjx8n5e8jt9zv/mda-hegtjx8n5e8jt9zv.m3u8";
         //String url = "http://7xse1z.com1.z0.glb.clouddn.com/1491813192";
@@ -94,12 +98,12 @@ public class DetailPlayer extends AppCompatActivity {
                 .setShowFullAnimation(false)
                 .setNeedLockFull(true)
                 .setSeekRatio(1)
-                .setUrl(url)
+                .setVideoPlayModel(videoPlayModel)
                 .setCacheWithPlay(false)
                 .setVideoTitle("测试视频")
                 .setStandardVideoAllCallBack(new SampleListener() {
                     @Override
-                    public void onPrepared(String url, Object... objects) {
+                    public void onPrepared(VideoPlayModel url, Object... objects) {
                         Debuger.printfError("***** onPrepared **** " + objects[0]);
                         Debuger.printfError("***** onPrepared **** " + objects[1]);
                         super.onPrepared(url, objects);
@@ -109,24 +113,24 @@ public class DetailPlayer extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onEnterFullscreen(String url, Object... objects) {
+                    public void onEnterFullscreen(VideoPlayModel url, Object... objects) {
                         super.onEnterFullscreen(url, objects);
                         Debuger.printfError("***** onEnterFullscreen **** " + objects[0]);//title
                         Debuger.printfError("***** onEnterFullscreen **** " + objects[1]);//当前全屏player
                     }
 
                     @Override
-                    public void onAutoComplete(String url, Object... objects) {
+                    public void onAutoComplete(VideoPlayModel url, Object... objects) {
                         super.onAutoComplete(url, objects);
                     }
 
                     @Override
-                    public void onClickStartError(String url, Object... objects) {
+                    public void onClickStartError(VideoPlayModel url, Object... objects) {
                         super.onClickStartError(url, objects);
                     }
 
                     @Override
-                    public void onQuitFullscreen(String url, Object... objects) {
+                    public void onQuitFullscreen(VideoPlayModel url, Object... objects) {
                         super.onQuitFullscreen(url, objects);
                         Debuger.printfError("***** onQuitFullscreen **** " + objects[0]);//title
                         Debuger.printfError("***** onQuitFullscreen **** " + objects[1]);//当前非全屏player

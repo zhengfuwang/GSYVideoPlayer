@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
+import com.shuyu.gsyvideoplayer.model.VideoPlayModel;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 
@@ -361,7 +362,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         } else if (i == R.id.surface_container && mCurrentState == CURRENT_STATE_ERROR) {
             if (mVideoAllCallBack != null) {
                 Debuger.printfLog("onClickStartError");
-                mVideoAllCallBack.onClickStartError(mOriginUrl, mTitle, this);
+                mVideoAllCallBack.onClickStartError(mVideoPlayModel, mTitle, this);
             }
             prepareVideo();
         } else if (i == R.id.thumb) {
@@ -384,16 +385,16 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             }
         } else if (i == R.id.surface_container) {
             // 播放地址无效时禁止全屏操作
-            if (TextUtils.isEmpty(mOriginUrl)) {
+            if (TextUtils.isEmpty(mVideoPlayModel.getVideoUrl())) {
                 return;
             }
             if (mVideoAllCallBack != null && isCurrentMediaListener()) {
                 if (mIfCurrentIsFullscreen) {
                     Debuger.printfLog("onClickBlankFullscreen");
-                    mVideoAllCallBack.onClickBlankFullscreen(mOriginUrl, mTitle, GSYVideoControlView.this);
+                    mVideoAllCallBack.onClickBlankFullscreen(mVideoPlayModel, mTitle, GSYVideoControlView.this);
                 } else {
                     Debuger.printfLog("onClickBlank");
-                    mVideoAllCallBack.onClickBlank(mOriginUrl, mTitle, GSYVideoControlView.this);
+                    mVideoAllCallBack.onClickBlank(mVideoPlayModel, mTitle, GSYVideoControlView.this);
                 }
             }
             startDismissControlViewTimer();
@@ -493,26 +494,26 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     /**
      * 设置播放URL
      *
-     * @param url           播放url
-     * @param cacheWithPlay 是否边播边缓存
+     * @param videoPlayModel  视频播放参数
+     * @param cacheWithPlay   是否边播边缓存
      * @return
      */
     @Override
-    public boolean setUp(String url, boolean cacheWithPlay) {
-        return setUp(url, cacheWithPlay, (File) null);
+    public boolean setUp(VideoPlayModel videoPlayModel, boolean cacheWithPlay) {
+        return setUp(videoPlayModel, cacheWithPlay, (File) null);
     }
 
     /**
      * 设置播放URL
      *
-     * @param url           播放url
-     * @param cacheWithPlay 是否边播边缓存
-     * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
+     * @param videoPlayModel  视频播放参数
+     * @param cacheWithPlay   是否边播边缓存
+     * @param cachePath       缓存路径，如果是M3U8或者HLS，请设置为false
      * @return
      */
     @Override
-    public boolean setUp(String url, boolean cacheWithPlay, File cachePath) {
-        if (super.setUp(url, cacheWithPlay, cachePath)) {
+    public boolean setUp(VideoPlayModel videoPlayModel, boolean cacheWithPlay, File cachePath) {
+        if (super.setUp(videoPlayModel, cacheWithPlay, cachePath)) {
             if (mIfCurrentIsFullscreen) {
                 if (mFullscreenButton != null)
                     mFullscreenButton.setImageResource(getShrinkImageRes());
@@ -529,14 +530,14 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     /**
      * 设置播放URL并开始播放
      *
-     * @param url           播放url
-     * @param cacheWithPlay 是否边播边缓存
-     * @param cachePath     缓存路径，如果是M3U8或者HLS，请设置为false
+     * @param videoPlayModel 播放视频参数
+     * @param cacheWithPlay  是否边播边缓存
+     * @param cachePath      缓存路径，如果是M3U8或者HLS，请设置为false
      * @return
      */
     @Override
-    public void startWithSetUp(String url, boolean cacheWithPlay, File cachePath) {
-        if (isCurrentMediaListener() && setUp(url, cacheWithPlay, cachePath)) {
+    public void startWithSetUp(VideoPlayModel videoPlayModel, boolean cacheWithPlay, File cachePath) {
+        if (isCurrentMediaListener() && setUp(videoPlayModel, cacheWithPlay, cachePath)) {
             clickStartIcon();
         } else {
             Log.e(getClass().getName(), "startWithSetUp() Failed !");
@@ -557,16 +558,16 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         // 未设置播放地址不处理拖动进度条逻辑
-        if (TextUtils.isEmpty(mOriginUrl)) {
+        if (TextUtils.isEmpty(mVideoPlayModel.getVideoUrl())) {
             return;
         }
         if (mVideoAllCallBack != null && isCurrentMediaListener()) {
             if (isIfCurrentIsFullscreen()) {
                 Debuger.printfLog("onClickSeekbarFullscreen");
-                mVideoAllCallBack.onClickSeekbarFullscreen(mOriginUrl, mTitle, this);
+                mVideoAllCallBack.onClickSeekbarFullscreen(mVideoPlayModel, mTitle, this);
             } else {
                 Debuger.printfLog("onClickSeekbar");
-                mVideoAllCallBack.onClickSeekbar(mOriginUrl, mTitle, this);
+                mVideoAllCallBack.onClickSeekbar(mVideoPlayModel, mTitle, this);
             }
         }
         if (GSYVideoManager.instance().getMediaPlayer() != null && mHadPlay) {
@@ -696,17 +697,17 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             }
             if (mVideoAllCallBack != null && isCurrentMediaListener()) {
                 Debuger.printfLog("onTouchScreenSeekPosition");
-                mVideoAllCallBack.onTouchScreenSeekPosition(mOriginUrl, mTitle, this);
+                mVideoAllCallBack.onTouchScreenSeekPosition(mVideoPlayModel, mTitle, this);
             }
         } else if (mBrightness) {
             if (mVideoAllCallBack != null && isCurrentMediaListener()) {
                 Debuger.printfLog("onTouchScreenSeekLight");
-                mVideoAllCallBack.onTouchScreenSeekLight(mOriginUrl, mTitle, this);
+                mVideoAllCallBack.onTouchScreenSeekLight(mVideoPlayModel, mTitle, this);
             }
         } else if (mChangeVolume) {
             if (mVideoAllCallBack != null && isCurrentMediaListener()) {
                 Debuger.printfLog("onTouchScreenSeekVolume");
-                mVideoAllCallBack.onTouchScreenSeekVolume(mOriginUrl, mTitle, this);
+                mVideoAllCallBack.onTouchScreenSeekVolume(mVideoPlayModel, mTitle, this);
             }
         }
     }
@@ -776,20 +777,20 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             if (mVideoAllCallBack != null && isCurrentMediaListener()) {
                 if (mIfCurrentIsFullscreen) {
                     Debuger.printfLog("onClickStopFullscreen");
-                    mVideoAllCallBack.onClickStopFullscreen(mOriginUrl, mTitle, this);
+                    mVideoAllCallBack.onClickStopFullscreen(mVideoPlayModel, mTitle, this);
                 } else {
                     Debuger.printfLog("onClickStop");
-                    mVideoAllCallBack.onClickStop(mOriginUrl, mTitle, this);
+                    mVideoAllCallBack.onClickStop(mVideoPlayModel, mTitle, this);
                 }
             }
         } else if (mCurrentState == CURRENT_STATE_PAUSE) {
             if (mVideoAllCallBack != null && isCurrentMediaListener()) {
                 if (mIfCurrentIsFullscreen) {
                     Debuger.printfLog("onClickResumeFullscreen");
-                    mVideoAllCallBack.onClickResumeFullscreen(mOriginUrl, mTitle, this);
+                    mVideoAllCallBack.onClickResumeFullscreen(mVideoPlayModel, mTitle, this);
                 } else {
                     Debuger.printfLog("onClickResume");
-                    mVideoAllCallBack.onClickResume(mOriginUrl, mTitle, this);
+                    mVideoAllCallBack.onClickResume(mVideoPlayModel, mTitle, this);
                 }
             }
             GSYVideoManager.instance().getMediaPlayer().start();

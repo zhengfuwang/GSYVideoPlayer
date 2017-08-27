@@ -14,6 +14,7 @@ import com.example.gsyvideoplayer.R;
 import com.example.gsyvideoplayer.model.SwitchVideoModel;
 import com.example.gsyvideoplayer.view.SwitchVideoTypeDialog;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.model.VideoPlayModel;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
@@ -199,7 +200,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
     public boolean setUp(List<SwitchVideoModel> url, boolean cacheWithPlay, String title) {
         mUrlList = url;
         setTitle(title);
-        return setUp(url.get(mSourcePosition).getUrl(), cacheWithPlay);
+        return setUp(url.get(mSourcePosition).getVideoPlayModel(), cacheWithPlay);
     }
 
     /**
@@ -214,7 +215,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
     public boolean setUp(List<SwitchVideoModel> url, boolean cacheWithPlay, File cachePath, String title) {
         mUrlList = url;
         setTitle(title);
-        return setUp(url.get(mSourcePosition).getUrl(), cacheWithPlay, cachePath);
+        return setUp(url.get(mSourcePosition).getVideoPlayModel(), cacheWithPlay, cachePath);
     }
 
     @Override
@@ -334,7 +335,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
                     if ((mCurrentState == GSYVideoPlayer.CURRENT_STATE_PLAYING
                             || mCurrentState == GSYVideoPlayer.CURRENT_STATE_PAUSE)
                             && GSYVideoManager.instance().getMediaPlayer() != null) {
-                        final String url = mUrlList.get(position).getUrl();
+                        final VideoPlayModel videoPlayModel = mUrlList.get(position).getVideoPlayModel();
                         onVideoPause();
                         final long currentPosition = mCurrentPosition;
                         GSYVideoManager.instance().releaseMediaPlayer();
@@ -344,7 +345,7 @@ public class SampleVideo extends StandardGSYVideoPlayer {
                             @Override
                             public void run() {
                                 setTitle(mTitle);
-                                setUp(url, mCache, mCachePath);
+                                setUp(videoPlayModel, mCache, mCachePath);
                                 setSeekOnStart(currentPosition);
                                 startPlayLogic();
                                 cancelProgressTimer();

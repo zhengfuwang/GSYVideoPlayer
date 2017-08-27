@@ -130,7 +130,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     public void startPlayLogic() {
         if (mStandardVideoAllCallBack != null) {
             Debuger.printfLog("onClickStartThumb");
-            mStandardVideoAllCallBack.onClickStartThumb(mOriginUrl, mTitle, StandardGSYVideoPlayer.this);
+            mStandardVideoAllCallBack.onClickStartThumb(mVideoPlayModel, mTitle, StandardGSYVideoPlayer.this);
         }
         prepareVideo();
         startDismissControlViewTimer();
@@ -719,6 +719,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     }
 
     public String getMediaUrl() {
-        return mOriginUrl;
+        return mVideoPlayModel.getVideoUrl();
     }
 }

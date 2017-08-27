@@ -50,7 +50,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
         mUriList = url;
         mPlayPosition = position;
         GSYVideoModel gsyVideoModel = url.get(position);
-        boolean set = setUp(gsyVideoModel.getUrl(), cacheWithPlay);
+        boolean set = setUp(gsyVideoModel.getVideoPlayModel(), cacheWithPlay);
         if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
             mTitleTextView.setText(gsyVideoModel.getTitle());
         }
@@ -70,7 +70,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
         mPlayPosition = position;
         GSYVideoModel gsyVideoModel = url.get(position);
         setTitle(gsyVideoModel.getTitle());
-        boolean set = setUp(gsyVideoModel.getUrl(), cacheWithPlay, cachePath);
+        boolean set = setUp(gsyVideoModel.getVideoPlayModel(), cacheWithPlay, cachePath);
         if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
             mTitleTextView.setText(gsyVideoModel.getTitle());
         }
@@ -120,7 +120,7 @@ public class ListGSYVideoPlayer extends StandardGSYVideoPlayer {
             mPlayPosition++;
             GSYVideoModel gsyVideoModel = mUriList.get(mPlayPosition);
             setTitle(gsyVideoModel.getTitle());
-            setUp(gsyVideoModel.getUrl(), mCache, mCachePath);
+            setUp(gsyVideoModel.getVideoPlayModel(), mCache, mCachePath);
             if (!TextUtils.isEmpty(gsyVideoModel.getTitle())) {
                 mTitleTextView.setText(gsyVideoModel.getTitle());
             }
