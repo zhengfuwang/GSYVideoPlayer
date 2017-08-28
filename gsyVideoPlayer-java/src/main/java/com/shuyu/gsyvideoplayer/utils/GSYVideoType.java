@@ -26,7 +26,10 @@ public class GSYVideoType {
 
     public final static int IJKEXOPLAYER = 1;
 
-
+    // surface
+    public final static int SUFRACE = 1;
+    // texture
+    public final static int TEXTURE = 0;
 
     //显示比例类型
     private static int TYPE = SCREEN_TYPE_DEFAULT;
@@ -34,6 +37,7 @@ public class GSYVideoType {
     //硬解码标志
     private static boolean MEDIA_CODEC_FLAG = false;
 
+    private static int sRenderType = TEXTURE;
 
 
     /**
@@ -66,5 +70,17 @@ public class GSYVideoType {
      */
     public static void setShowType(int type) {
         TYPE = type;
+    }
+
+    public static int getRenderType() {
+        return sRenderType;
+    }
+
+    /**
+     * 渲染控件
+     * @param renderType
+     */
+    public static void setRenderType(int renderType) {
+        sRenderType = renderType;
     }
 }

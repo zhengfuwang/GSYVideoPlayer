@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.internal.view.ContextThemeWrapper;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -265,5 +266,11 @@ public class CommonUtil {
             return scanForActivity(((ContextWrapper) context).getBaseContext());
 
         return null;
+    }
+
+    public static boolean getCurrentScreenLand(Activity context) {
+        return context.getWindowManager().getDefaultDisplay().getRotation() == Surface.ROTATION_90 ||
+                context.getWindowManager().getDefaultDisplay().getRotation() == Surface.ROTATION_270;
+
     }
 }
