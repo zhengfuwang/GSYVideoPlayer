@@ -54,10 +54,9 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
         String coverImageUrl = null;
         if (videoModel.imgs != null && videoModel.imgs.size() > 0) {
             coverImageUrl = videoModel.imgs.get(0).small_img;
-            LogUtils.e(coverImageUrl);
         }
         Glide.with(imageView.getContext())
-                .load("https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=4078627915,1555440430&fm=173&s=B41078339387754350DD00DF0100C0A2&w=218&h=146&img.JPEG")
+                .load(coverImageUrl)
                 .placeholder(Color.GRAY)
                 .error(Color.GRAY)
                 .crossFade()
