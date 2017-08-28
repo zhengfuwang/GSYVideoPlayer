@@ -797,7 +797,6 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
      */
     protected void clickStartIcon() {
         if (TextUtils.isEmpty(mUrl)) {
-            mCurrentState = CURRENT_STATE_OBTAIN_URL;
             if (obtainLogic()) {
                 Debuger.printfError("******** 执行获取播放地址Url逻辑 ********");
             } else {
@@ -939,9 +938,11 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     protected void startDismissControlViewTimer() {
         cancelDismissControlViewTimer();
-        mDismissControlViewTimer = new Timer();
-        mDismissControlViewTimerTask = new DismissControlViewTimerTask();
-        mDismissControlViewTimer.schedule(mDismissControlViewTimerTask, mDismissControlTime);
+        if (!TextUtils.isEmpty(getMediaUrl())) {
+            mDismissControlViewTimer = new Timer();
+            mDismissControlViewTimerTask = new DismissControlViewTimerTask();
+            mDismissControlViewTimer.schedule(mDismissControlViewTimerTask, mDismissControlTime);
+        }
     }
 
     protected void cancelDismissControlViewTimer() {

@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -414,13 +415,13 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     protected void changeUiToPreparingShow() {
         Debuger.printfLog("changeUiToPreparingShow");
 
-        setViewShowState(mTopContainer, VISIBLE);
-        setViewShowState(mBottomContainer, VISIBLE);
+        setViewShowState(mTopContainer, TextUtils.isEmpty(getMediaUrl()) ? INVISIBLE : VISIBLE);
+        setViewShowState(mBottomContainer, TextUtils.isEmpty(getMediaUrl()) ? INVISIBLE : VISIBLE);
         setViewShowState(mStartButton, INVISIBLE);
-        setViewShowState(mLoadingProgressBar, VISIBLE);
         setViewShowState(mThumbImageViewLayout, INVISIBLE);
         setViewShowState(mBottomProgressBar, INVISIBLE);
         setViewShowState(mLockScreen, GONE);
+        setViewShowState(mLoadingProgressBar, VISIBLE);
 
         if (mLoadingProgressBar instanceof ENDownloadView) {
             ENDownloadView enDownloadView = (ENDownloadView) mLoadingProgressBar;
@@ -716,9 +717,5 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     public void setStandardVideoAllCallBack(StandardVideoAllCallBack standardVideoAllCallBack) {
         this.mStandardVideoAllCallBack = standardVideoAllCallBack;
         setVideoAllCallBack(standardVideoAllCallBack);
-    }
-
-    public String getMediaUrl() {
-        return mVideoPlayModel.getVideoUrl();
     }
 }

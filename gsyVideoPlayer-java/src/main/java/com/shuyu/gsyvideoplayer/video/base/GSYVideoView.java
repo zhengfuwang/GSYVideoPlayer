@@ -63,8 +63,6 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     public static final int CURRENT_STATE_AUTO_COMPLETE = 6;
     //错误状态
     public static final int CURRENT_STATE_ERROR = 7;
-    //获取播放URL状态
-    public static final int CURRENT_STATE_OBTAIN_URL = 8;
 
     //避免切换时频繁setup
     public static final int CHANGE_DELAY_TIME = 2000;
@@ -268,7 +266,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      * 获取播放URL逻辑
      */
     protected boolean obtainLogic() {
-        if (mVideoAllCallBack != null && mCurrentState == CURRENT_STATE_OBTAIN_URL) {
+        if (mVideoAllCallBack != null) {
             boolean processed = mVideoAllCallBack.onObtainMediaUrl(this);
             // 已处理获取URL逻辑切换为准备状态
             if (processed) {
@@ -959,6 +957,10 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      */
     public void setShowPauseCover(boolean showPauseCover) {
         this.mShowPauseCover = showPauseCover;
+    }
+
+    public String getMediaUrl() {
+        return mVideoPlayModel.getVideoUrl();
     }
 
 }
