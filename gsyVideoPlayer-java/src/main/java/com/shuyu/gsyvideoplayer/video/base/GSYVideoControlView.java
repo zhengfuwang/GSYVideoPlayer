@@ -157,8 +157,11 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     //title
     protected TextView mTitleTextView;
 
-    //顶部和底部区域
+    // 顶部和底部区域
     protected ViewGroup mTopContainer, mBottomContainer;
+    // 流量播放提示
+    protected ViewGroup mFlowContainer;
+    protected TextView mFlowHintText;
 
     //封面父布局
     protected RelativeLayout mThumbImageViewLayout;
@@ -210,9 +213,11 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         mTotalTimeTextView = (TextView) findViewById(R.id.total);
         mBottomContainer = (ViewGroup) findViewById(R.id.layout_bottom);
         mTopContainer = (ViewGroup) findViewById(R.id.layout_top);
+        mFlowContainer = (ViewGroup) findViewById(R.id.flow_container);
         mBottomProgressBar = (ProgressBar) findViewById(R.id.bottom_progressbar);
         mThumbImageViewLayout = (RelativeLayout) findViewById(R.id.thumb);
         mLockScreen = (ImageView) findViewById(R.id.lock_screen);
+        mFlowHintText = (TextView) findViewById(R.id.flow_hint_text);
 
         mLoadingProgressBar = findViewById(R.id.loading);
 
@@ -222,6 +227,12 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
         if (mStartButton != null) {
             mStartButton.setOnClickListener(this);
+        }
+
+        if (mFlowContainer != null) {
+            mFlowContainer.setVisibility(View.GONE);
+            mFlowContainer.findViewById(R.id.flow_play_continue).setOnClickListener(this);
+            mFlowContainer.findViewById(R.id.flow_play_cancel).setOnClickListener(this);
         }
 
         if (mFullscreenButton != null) {
@@ -414,6 +425,13 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                 }
             }
             startDismissControlViewTimer();
+        } else if (i == R.id.flow_play_continue) {
+            // 移动网络继续播放
+            startPlayLogic();
+        } else if (i == R.id.flow_play_cancel) {
+            // 取消移动网络播放
+            // GSYVideoPlayer.releaseAllVideos();
+            setStateAndUi(CURRENT_STATE_NORMAL);
         }
     }
 
@@ -802,8 +820,6 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             } else {
                 Debuger.printfError("********" + getResources().getString(R.string.no_url));
             }
-
-            //Toast.makeText(getActivityContext(), getResources().getString(R.string.no_url), Toast.LENGTH_SHORT).show();
             return;
         }
         if (mCurrentState == CURRENT_STATE_NORMAL || mCurrentState == CURRENT_STATE_ERROR) {

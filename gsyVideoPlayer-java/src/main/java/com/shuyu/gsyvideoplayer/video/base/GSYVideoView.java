@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.InflateException;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +64,8 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     public static final int CURRENT_STATE_AUTO_COMPLETE = 6;
     //错误状态
     public static final int CURRENT_STATE_ERROR = 7;
-
+    // 移动网络提示状态
+    public static final int CURRENT_STATE_HINT_FLOW = 8;
     //避免切换时频繁setup
     public static final int CHANGE_DELAY_TIME = 2000;
 

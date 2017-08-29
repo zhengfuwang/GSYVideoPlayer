@@ -96,7 +96,7 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
                     @Override
                     public void run() {
                         VideoUrlParserService.start(gsyVideoPlayer.getContext(),
-                                videoModel.media_source, videoModel.media_vid);
+                                videoModel.media_source, videoModel.media_vid, videoModel.duration);
                     }
                 }, 3000);
                 return true;

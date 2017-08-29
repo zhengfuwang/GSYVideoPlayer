@@ -1,5 +1,8 @@
 package com.shuyu.gsyvideoplayer.model;
 
+import android.text.Layout;
+import android.text.TextUtils;
+
 /**
  * Created by xiyangyuge on 2017/8/26.
  */
@@ -8,7 +11,8 @@ public class VideoPlayModel {
 
     public String videoId;
     private String videoUrl;
-    public String videoSize;
+    public long videoSize;
+    public String flowHintText; // 流量播放提示文字
 
     public VideoPlayModel() {
     }
@@ -18,10 +22,11 @@ public class VideoPlayModel {
         this.videoUrl = videoUrl;
     }
 
-    public VideoPlayModel(String videoId, String videoUrl, String videoSize) {
+    public VideoPlayModel(String videoId, String videoUrl, long videoSize, String flowHintText) {
         this.videoId = videoId;
         this.videoUrl = videoUrl;
-        this.videoSize = "0".equals(videoSize) ? null : videoSize;
+        this.videoSize = videoSize;
+        this.flowHintText = flowHintText;
     }
 
     public String getVideoUrl() {

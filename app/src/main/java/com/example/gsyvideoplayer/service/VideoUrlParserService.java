@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.telephony.TelephonyManager;
+import android.text.Layout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.CookieManager;
@@ -17,9 +17,10 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.blankj.utilcode.util.AppUtils;
+import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.DeviceUtils;
 import com.blankj.utilcode.util.FileIOUtils;
+import com.blankj.utilcode.util.SpanUtils;
 import com.example.gsyvideoplayer.utils.Mp4Util;
 import com.example.gsyvideoplayer.utils.VideoUtils;
 import com.google.gson.Gson;
@@ -29,8 +30,6 @@ import com.shuyu.gsyvideoplayer.utils.NetworkUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
@@ -62,9 +61,10 @@ public class VideoUrlParserService extends Service {
 
     private String videoType;
     private String videoId;
+    private String mVideoDuration;
     private boolean isWifiConnected;
 
-    public static void start(Context mCxt, String videoType, String videoId) {
+    public static void start(Context mCxt, String videoType, String videoId, String duration) {
         if (!NetworkUtils.isConnected(mCxt)) {
             // 网络不可用时直接返回错误提示
             return;
@@ -72,6 +72,7 @@ public class VideoUrlParserService extends Service {
         Intent intent = new Intent(mCxt, VideoUrlParserService.class);
         intent.putExtra("videoType", videoType);
         intent.putExtra("videoId", videoId);
+        intent.putExtra("videoDuration", duration);
         mCxt.startService(intent);
     }
 
@@ -127,6 +128,22 @@ public class VideoUrlParserService extends Service {
         mWebView.loadUrl("file:///android_asset/parse/media.html");
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent == null) {
+            return super.onStartCommand(intent, flags, startId);
+        }
+        // isWifiConnected = NetworkUtils.isWifiConnected(this);
+        isWifiConnected = false;
+        videoType = intent.getStringExtra("videoType");
+        videoId = intent.getStringExtra("videoId");
+        mVideoDuration = intent.getStringExtra("videoDuration");
+        if (loadParseHtmComplete) {
+            parseUrl(videoType, videoId);
+        }
+        return super.onStartCommand(intent, flags, startId);
+    }
+
     private class VideoJavascriptInterface {
 
         @JavascriptInterface
@@ -150,7 +167,7 @@ public class VideoUrlParserService extends Service {
                     .flatMap(new Function<String, ObservableSource<VideoPlayModel>>() {
                         @Override
                         public ObservableSource<VideoPlayModel> apply(@NonNull String s) throws Exception {
-                            return Observable.just(new VideoPlayModel(vid, s, VideoUtils.FormetFileSize(fileSize)));
+                            return Observable.just(new VideoPlayModel(vid, s, fileSize, getFlowHintText(fileSize)));
                         }
                     })
                     .subscribeOn(Schedulers.io())
@@ -185,20 +202,6 @@ public class VideoUrlParserService extends Service {
             Log.e(TAG, "jdy -> : " + str);
         }
 
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent == null) {
-            return super.onStartCommand(intent, flags, startId);
-        }
-        isWifiConnected = NetworkUtils.isWifiConnected(this);
-        videoType = intent.getStringExtra("videoType");
-        videoId = intent.getStringExtra("videoId");
-        if (loadParseHtmComplete) {
-            parseUrl(videoType, videoId);
-        }
-        return super.onStartCommand(intent, flags, startId);
     }
 
     private void parseUrl(String videoType, String videoId) {
@@ -240,9 +243,9 @@ public class VideoUrlParserService extends Service {
             return;
         }
         // 计算视频大小
-        Observable.create(new ObservableOnSubscribe<String>() {
+        Observable.create(new ObservableOnSubscribe<Long>() {
             @Override
-            public void subscribe(@NonNull ObservableEmitter<String> subscribe) throws Exception {
+            public void subscribe(@NonNull ObservableEmitter<Long> subscribe) throws Exception {
                 try {
                     URL url = new URL(vUrl);
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -260,9 +263,9 @@ public class VideoUrlParserService extends Service {
                     Map<String, List<String>> headerFields = conn.getHeaderFields();
                     Log.e(TAG, "headerFields:" + new Gson().toJson(headerFields));
                     if(headerFields == null || headerFields.size() == 0) {
-                        subscribe.onNext("0");
+                        subscribe.onNext(0L);
                     } else {
-                        subscribe.onNext(headerFields.get("Content-Length").get(0));
+                        subscribe.onNext(Long.parseLong(headerFields.get("Content-Length").get(0)));
                     }
                     subscribe.onComplete();
                 } catch (Exception e) {
@@ -271,23 +274,22 @@ public class VideoUrlParserService extends Service {
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<String>() {
+                .subscribe(new Observer<Long>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(@NonNull String s) {
-                        String fileSizeStr = VideoUtils.FormetFileSize(Long.parseLong(s));
-                        startPlayVideo(new VideoPlayModel(vId, vUrl, fileSizeStr));
+                    public void onNext(@NonNull Long videoSize) {
+                        startPlayVideo(new VideoPlayModel(vId, vUrl, videoSize, getFlowHintText(videoSize)));
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
                         Log.e(TAG, e.toString());
                         // 解析时长失败 继续播放
-                        startPlayVideo(new VideoPlayModel(vId, vUrl));
+                        startPlayVideo(new VideoPlayModel(vId, vUrl, 0L, getFlowHintText(0L)));
                     }
 
                     @Override
@@ -328,15 +330,15 @@ public class VideoUrlParserService extends Service {
         return null;
     }
 
-    private void writeToFile(String fileName, String data, Context context) {
-        try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(fileName, Context.MODE_PRIVATE));
-            outputStreamWriter.write(data);
-            outputStreamWriter.close();
+    private String getFlowHintText(long videoSize) {
+        SpanUtils spanUtils = new SpanUtils()
+                .appendLine("正在使用非Wi-Fi网络播放将产生流量费用").setAlign(Layout.Alignment.ALIGN_CENTER);
+        if (videoSize > 0L) {
+            spanUtils.appendLine()
+                    .appendLine("视频时长" + mVideoDuration + "  |  " + "流量约" + VideoUtils.FormetFileSize(videoSize))
+                    .setFontSize(ConvertUtils.sp2px(12));
         }
-        catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
+        return spanUtils.create().toString();
     }
 
 }
