@@ -164,6 +164,9 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     protected TextView mFlowHintText;
     protected TextView mDurationTextView;
 
+    // 错误页面布局
+    protected ViewGroup mErrorContainer;
+
     //封面父布局
     protected RelativeLayout mThumbImageViewLayout;
 
@@ -220,8 +223,8 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         mLockScreen = (ImageView) findViewById(R.id.lock_screen);
         mFlowHintText = (TextView) findViewById(R.id.flow_hint_text);
         mDurationTextView = (TextView) findViewById(R.id.video_duration);
-
         mLoadingProgressBar = findViewById(R.id.loading);
+        mErrorContainer = (ViewGroup) findViewById(R.id.error_container);
 
 
         if (isInEditMode())
@@ -235,6 +238,11 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             mFlowContainer.setVisibility(View.GONE);
             mFlowContainer.findViewById(R.id.flow_play_continue).setOnClickListener(this);
             mFlowContainer.findViewById(R.id.flow_play_cancel).setOnClickListener(this);
+        }
+
+        if (mErrorContainer != null) {
+            mErrorContainer.setVisibility(View.GONE);
+            mErrorContainer.findViewById(R.id.error_retry).setOnClickListener(this);
         }
 
         if (mFullscreenButton != null) {
@@ -390,7 +398,11 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                 Debuger.printfLog("onClickStartError");
                 mVideoAllCallBack.onClickStartError(mVideoPlayModel, mTitle, this);
             }
-            prepareVideo();
+            if (TextUtils.isEmpty(mUrl)) {
+                obtainLogic();
+            } else {
+                prepareVideo();
+            }
         } else if (i == R.id.thumb) {
             if (!mThumbPlay) {
                 return;
@@ -431,6 +443,9 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             // 取消移动网络播放
             // GSYVideoPlayer.releaseAllVideos();
             setStateAndUi(CURRENT_STATE_NORMAL);
+        } else if (i == R.id.error_retry) {
+            // 播放失败点击重试
+            clickStartIcon();
         }
     }
 
@@ -588,6 +603,13 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             clickStartIcon();
         } else {
             Log.e(getClass().getName(), "startWithSetUp() Failed !");
+        }
+    }
+
+    @Override
+    public void showErrorState() {
+        if (isCurrentMediaListener()) {
+            setStateAndUi(CURRENT_STATE_ERROR);
         }
     }
 
@@ -830,11 +852,8 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
      */
     protected void clickStartIcon() {
         if (TextUtils.isEmpty(mUrl)) {
-            if (obtainLogic()) {
-                Debuger.printfError("******** 执行获取播放地址Url逻辑 ********");
-            } else {
-                Debuger.printfError("********" + getResources().getString(R.string.no_url));
-            }
+            Debuger.printfError("******** 执行获取播放地址Url逻辑 ********");
+            obtainLogic();
             return;
         }
         if (mCurrentState == CURRENT_STATE_NORMAL || mCurrentState == CURRENT_STATE_ERROR) {

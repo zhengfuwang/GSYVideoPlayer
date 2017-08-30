@@ -269,16 +269,18 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     /**
      * 获取播放URL逻辑
      */
-    protected boolean obtainLogic() {
+    protected void obtainLogic() {
         if (mVideoAllCallBack != null) {
-            boolean processed = mVideoAllCallBack.onObtainMediaUrl(this);
-            // 已处理获取URL逻辑切换为准备状态
-            if (processed) {
-                prepareObtailMediaUrl();
+            if (GSYVideoManager.instance().listener() != null) {
+                GSYVideoManager.instance().listener().onCompletion();
             }
-            return processed;
+            GSYVideoManager.instance().setListener(this);
+            GSYVideoManager.instance().setPlayTag(mPlayTag);
+            GSYVideoManager.instance().setPlayPosition(mPlayPosition);
+            mBackUpPlayingBufferState = -1;
+            setStateAndUi(CURRENT_STATE_PREPAREING);
+            mVideoAllCallBack.onObtainMediaUrl(this);
         }
-        return false;
     }
 
     /**
@@ -293,20 +295,6 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
             mVideoAllCallBack.onClickStartError(mVideoPlayModel, mTitle, this);
         }
         prepareVideo();
-    }
-
-    /**
-     * 开启获取URL状态
-     */
-    protected void prepareObtailMediaUrl() {
-        if (GSYVideoManager.instance().listener() != null) {
-            GSYVideoManager.instance().listener().onCompletion();
-        }
-        GSYVideoManager.instance().setListener(this);
-        GSYVideoManager.instance().setPlayTag(mPlayTag);
-        GSYVideoManager.instance().setPlayPosition(mPlayPosition);
-        mBackUpPlayingBufferState = -1;
-        setStateAndUi(CURRENT_STATE_PREPAREING);
     }
 
     /**

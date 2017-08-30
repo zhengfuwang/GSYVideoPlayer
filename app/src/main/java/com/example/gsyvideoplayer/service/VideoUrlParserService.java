@@ -68,6 +68,9 @@ public class VideoUrlParserService extends Service {
     public static void start(Context mCxt, String videoType, String videoId, String duration) {
         if (!NetworkUtils.isConnected(mCxt)) {
             // 网络不可用时直接返回错误提示
+            if (GSYVideoManager.instance().listener() != null) {
+                GSYVideoManager.instance().listener().showErrorState();
+            }
             return;
         }
         Intent intent = new Intent(mCxt, VideoUrlParserService.class);
@@ -107,11 +110,19 @@ public class VideoUrlParserService extends Service {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 Log.e(TAG, url);
+
                 Map<String, String> params = VideoUtils.getUrlParams(url);
                 String fileUrl = params.get("fileurl");
                 String vid = params.get("vid");
-                if (vid.equals(videoId)) {
-                    calculationVideoLength(vid, fileUrl);
+                // state 2 失败， 1 成功
+                if (params.get("state") == null || "2".equals(params.get("state"))) {
+                    if (GSYVideoManager.instance().listener() != null) {
+                        GSYVideoManager.instance().listener().showErrorState();
+                    }
+                } else {
+                    if (vid.equals(videoId)) {
+                        calculationVideoLength(vid, fileUrl);
+                    }
                 }
                 return true;
             }
@@ -206,10 +217,11 @@ public class VideoUrlParserService extends Service {
 
     private void parseUrl(String videoType, String videoId) {
         if (TextUtils.isEmpty(videoType) || TextUtils.isEmpty(videoId)) {
-            Log.e(TAG, "视频参数异常");
+            GSYVideoManager.instance().listener().showErrorState();
+            LogUtils.e(TAG, "视频参数异常");
             return;
         }
-        Log.e(TAG, "VideoType = " + videoType + "," + "videoId = " + videoId);
+        LogUtils.e(TAG, "VideoType = " + videoType + "," + "videoId = " + videoId);
         // 网络类型，WIFI = 1, 移动网络 = 2
         int netWorkType = NetworkUtils.isWifiConnected(this) ? 1 : 2;
         mWebView.loadUrl("javascript:getVideoUrl({" +

@@ -163,6 +163,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         }
 
         mCurrentState = CURRENT_STATE_HINT_FLOW;
+        setViewShowState(mErrorContainer, GONE);
         setViewShowState(mDurationTextView, GONE);
         setViewShowState(mFlowContainer, VISIBLE);
         setViewShowState(mTopContainer, INVISIBLE);
@@ -396,6 +397,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
     @Override
     protected void hideAllWidget() {
+        setViewShowState(mErrorContainer, GONE);
         setViewShowState(mDurationTextView, GONE);
         setViewShowState(mFlowContainer, GONE);
         setViewShowState(mBottomContainer, INVISIBLE);
@@ -408,6 +410,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     @Override
     protected void changeUiToNormal() {
         Debuger.printfLog("changeUiToNormal");
+        setViewShowState(mErrorContainer, GONE);
         setViewShowState(mDurationTextView, TextUtils.isEmpty(mDuration) ? GONE : VISIBLE);
         setViewShowState(mFlowContainer, GONE);
         setViewShowState(mTopContainer, VISIBLE);
@@ -427,6 +430,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     @Override
     protected void changeUiToPreparingShow() {
         Debuger.printfLog("changeUiToPreparingShow");
+        setViewShowState(mErrorContainer, GONE);
         setViewShowState(mDurationTextView, GONE);
         setViewShowState(mFlowContainer, GONE);
         setViewShowState(mTopContainer, TextUtils.isEmpty(getMediaUrl()) ? INVISIBLE : VISIBLE);
@@ -448,6 +452,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     @Override
     protected void changeUiToPlayingShow() {
         Debuger.printfLog("changeUiToPlayingShow");
+        setViewShowState(mErrorContainer, GONE);
         setViewShowState(mDurationTextView, GONE);
         setViewShowState(mFlowContainer, GONE);
         setViewShowState(mTopContainer, VISIBLE);
@@ -467,6 +472,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     @Override
     protected void changeUiToPauseShow() {
         Debuger.printfLog("changeUiToPauseShow");
+        setViewShowState(mErrorContainer, GONE);
         setViewShowState(mDurationTextView, GONE);
         setViewShowState(mFlowContainer, GONE);
         setViewShowState(mTopContainer, VISIBLE);
@@ -487,6 +493,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     @Override
     protected void changeUiToPlayingBufferingShow() {
         Debuger.printfLog("changeUiToPlayingBufferingShow");
+        setViewShowState(mErrorContainer, GONE);
         setViewShowState(mDurationTextView, GONE);
         setViewShowState(mFlowContainer, GONE);
         setViewShowState(mTopContainer, VISIBLE);
@@ -508,7 +515,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     @Override
     protected void changeUiToCompleteShow() {
         Debuger.printfLog("changeUiToCompleteShow");
-
+        setViewShowState(mErrorContainer, GONE);
         setViewShowState(mDurationTextView, GONE);
         setViewShowState(mFlowContainer, GONE);
         setViewShowState(mTopContainer, VISIBLE);
@@ -528,21 +535,16 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     @Override
     protected void changeUiToError() {
         Debuger.printfLog("changeUiToError");
-
+        setViewShowState(mErrorContainer, VISIBLE);
         setViewShowState(mDurationTextView, GONE);
         setViewShowState(mFlowContainer, GONE);
         setViewShowState(mTopContainer, INVISIBLE);
         setViewShowState(mBottomContainer, INVISIBLE);
-        setViewShowState(mStartButton, VISIBLE);
+        setViewShowState(mStartButton, INVISIBLE);
         setViewShowState(mLoadingProgressBar, INVISIBLE);
         setViewShowState(mThumbImageViewLayout, INVISIBLE);
         setViewShowState(mBottomProgressBar, INVISIBLE);
         setViewShowState(mLockScreen, (mIfCurrentIsFullscreen && mNeedLockFull) ? VISIBLE : GONE);
-
-        if (mLoadingProgressBar instanceof ENDownloadView) {
-            ((ENDownloadView) mLoadingProgressBar).reset();
-        }
-        updateStartImage();
     }
 
     @Override
@@ -556,7 +558,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
     protected void changeUiToPrepareingClear() {
         Debuger.printfLog("changeUiToPrepareingClear");
-
+        setViewShowState(mErrorContainer, GONE);
         setViewShowState(mDurationTextView, GONE);
         setViewShowState(mFlowContainer, GONE);
         setViewShowState(mTopContainer, INVISIBLE);
@@ -587,7 +589,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
     protected void changeUiToPlayingBufferingClear() {
         Debuger.printfLog("changeUiToPlayingBufferingClear");
-
+        setViewShowState(mErrorContainer, GONE);
         setViewShowState(mDurationTextView, GONE);
         setViewShowState(mFlowContainer, GONE);
         setViewShowState(mTopContainer, INVISIBLE);
@@ -609,7 +611,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
     protected void changeUiToClear() {
         Debuger.printfLog("changeUiToClear");
-
+        setViewShowState(mErrorContainer, GONE);
         setViewShowState(mDurationTextView, GONE);
         setViewShowState(mFlowContainer, GONE);
         setViewShowState(mTopContainer, INVISIBLE);
@@ -627,7 +629,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
 
     protected void changeUiToCompleteClear() {
         Debuger.printfLog("changeUiToCompleteClear");
-
+        setViewShowState(mErrorContainer, GONE);
         setViewShowState(mDurationTextView, GONE);
         setViewShowState(mFlowContainer, GONE);
         setViewShowState(mTopContainer, INVISIBLE);

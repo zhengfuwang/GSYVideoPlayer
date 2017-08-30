@@ -93,15 +93,9 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
 
         gsyVideoPlayer.setStandardVideoAllCallBack(new SampleListener() {
             @Override
-            public boolean onObtainMediaUrl(Object... objects) {
-                gsyVideoPlayer.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        VideoUrlParserService.start(gsyVideoPlayer.getContext(),
-                                videoModel.media_source, videoModel.media_vid, videoModel.duration);
-                    }
-                }, 3000);
-                return true;
+            public void onObtainMediaUrl(Object... objects) {
+                VideoUrlParserService.start(gsyVideoPlayer.getContext(),
+                        videoModel.media_source, videoModel.media_vid, videoModel.duration);
             }
         });
     }

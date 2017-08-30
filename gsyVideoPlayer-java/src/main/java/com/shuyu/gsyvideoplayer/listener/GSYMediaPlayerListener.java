@@ -28,4 +28,6 @@ public interface GSYMediaPlayerListener {
     void onVideoResume();
 
     void startWithSetUp(VideoPlayModel videoPlayModel, boolean cacheWithPlay, File cachePath);
+
+    void showErrorState();
 }
