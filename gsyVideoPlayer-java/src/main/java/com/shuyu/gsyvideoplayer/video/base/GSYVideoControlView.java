@@ -162,6 +162,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     // 流量播放提示
     protected ViewGroup mFlowContainer;
     protected TextView mFlowHintText;
+    protected TextView mVideoDuration;
 
     //封面父布局
     protected RelativeLayout mThumbImageViewLayout;
@@ -218,6 +219,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         mThumbImageViewLayout = (RelativeLayout) findViewById(R.id.thumb);
         mLockScreen = (ImageView) findViewById(R.id.lock_screen);
         mFlowHintText = (TextView) findViewById(R.id.flow_hint_text);
+        mVideoDuration = (TextView) findViewById(R.id.video_duration);
 
         mLoadingProgressBar = findViewById(R.id.loading);
 
@@ -322,9 +324,6 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
      */
     @Override
     protected void setStateAndUi(int state) {
-        if (mCurrentState == state) {
-            return;
-        }
         mCurrentState = state;
         switch (mCurrentState) {
             case CURRENT_STATE_NORMAL:
@@ -520,6 +519,21 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         this.mTitle = title;
         if (title != null && mTitleTextView != null) {
             mTitleTextView.setText(title);
+        }
+    }
+
+    /**
+     * 设置视频播放时长
+     * @param duration
+     */
+    public void setDuration(String duration) {
+        if (mVideoDuration != null) {
+            if (TextUtils.isEmpty(duration)) {
+                setViewShowState(mVideoDuration, GONE);
+            } else {
+                setViewShowState(mVideoDuration, VISIBLE);
+                mVideoDuration.setText(duration);
+            }
         }
     }
 

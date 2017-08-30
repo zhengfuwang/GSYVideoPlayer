@@ -20,6 +20,7 @@ import android.webkit.WebViewClient;
 import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.DeviceUtils;
 import com.blankj.utilcode.util.FileIOUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.SpanUtils;
 import com.example.gsyvideoplayer.utils.Mp4Util;
 import com.example.gsyvideoplayer.utils.VideoUtils;
@@ -133,8 +134,7 @@ public class VideoUrlParserService extends Service {
         if (intent == null) {
             return super.onStartCommand(intent, flags, startId);
         }
-        // isWifiConnected = NetworkUtils.isWifiConnected(this);
-        isWifiConnected = false;
+        isWifiConnected = NetworkUtils.isWifiConnected(this);
         videoType = intent.getStringExtra("videoType");
         videoId = intent.getStringExtra("videoId");
         mVideoDuration = intent.getStringExtra("videoDuration");
@@ -305,6 +305,7 @@ public class VideoUrlParserService extends Service {
                 .subscribe(new Consumer<VideoPlayModel>() {
                     @Override
                     public void accept(VideoPlayModel videoPlayModel) throws Exception {
+                        LogUtils.e(new Gson().toJson(videoPlayModel));
                         if (GSYVideoManager.instance().listener() != null) {
                             GSYVideoManager.instance().listener().startWithSetUp(videoPlayModel, false , null);
                         }
@@ -331,14 +332,10 @@ public class VideoUrlParserService extends Service {
     }
 
     private String getFlowHintText(long videoSize) {
-        SpanUtils spanUtils = new SpanUtils()
-                .appendLine("正在使用非Wi-Fi网络播放将产生流量费用").setAlign(Layout.Alignment.ALIGN_CENTER);
         if (videoSize > 0L) {
-            spanUtils.appendLine()
-                    .appendLine("视频时长" + mVideoDuration + "  |  " + "流量约" + VideoUtils.FormetFileSize(videoSize))
-                    .setFontSize(ConvertUtils.sp2px(12));
+            return "视频时长" + mVideoDuration + "  |  " + "流量约" + VideoUtils.FormetFileSize(videoSize);
         }
-        return spanUtils.create().toString();
+        return null;
     }
 
 }
