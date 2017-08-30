@@ -162,7 +162,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     // 流量播放提示
     protected ViewGroup mFlowContainer;
     protected TextView mFlowHintText;
-    protected TextView mVideoDuration;
+    protected TextView mDurationTextView;
 
     //封面父布局
     protected RelativeLayout mThumbImageViewLayout;
@@ -219,7 +219,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         mThumbImageViewLayout = (RelativeLayout) findViewById(R.id.thumb);
         mLockScreen = (ImageView) findViewById(R.id.lock_screen);
         mFlowHintText = (TextView) findViewById(R.id.flow_hint_text);
-        mVideoDuration = (TextView) findViewById(R.id.video_duration);
+        mDurationTextView = (TextView) findViewById(R.id.video_duration);
 
         mLoadingProgressBar = findViewById(R.id.loading);
 
@@ -527,12 +527,13 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
      * @param duration
      */
     public void setDuration(String duration) {
-        if (mVideoDuration != null) {
-            if (TextUtils.isEmpty(duration)) {
-                setViewShowState(mVideoDuration, GONE);
-            } else {
-                setViewShowState(mVideoDuration, VISIBLE);
-                mVideoDuration.setText(duration);
+        this.mDuration = duration;
+        if (TextUtils.isEmpty(duration)) {
+            setViewShowState(mDurationTextView, GONE);
+        } else {
+            setViewShowState(mDurationTextView, VISIBLE);
+            if (mDurationTextView != null) {
+                mDurationTextView.setText(duration);
             }
         }
     }

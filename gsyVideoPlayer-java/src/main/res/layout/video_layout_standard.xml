@@ -227,7 +227,7 @@
         android:layout_margin="5dp"
         android:background="@drawable/video_duration_bg"
         android:paddingBottom="2dp"
-        android:paddingLeft="5dp"
+        android:paddingLeft="6dp"
         android:paddingRight="5dp"
         android:paddingTop="1dp"
         android:textColor="#ffffff"

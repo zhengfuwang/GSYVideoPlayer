@@ -89,6 +89,7 @@ public class ListNormalAdapter extends BaseAdapter {
 
         //默认缓存路径
         holder.gsyVideoPlayer.setTitle("这是title");
+        holder.gsyVideoPlayer.setDuration(null);
 
         VideoPlayModel videoPlayModel = new VideoPlayModel();
         videoPlayModel.setVideoUrl(url);

@@ -142,8 +142,10 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     //转化后的URL
     protected String mUrl;
 
-    //标题
+    // 标题
     protected String mTitle;
+    // 视频时长
+    protected String mDuration;
 
     //网络状态
     protected String mNetSate = "NORMAL";
