@@ -16,6 +16,7 @@ import com.example.gsyvideoplayer.model.VideoModel;
 import com.example.gsyvideoplayer.service.VideoUrlParserService;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
+import com.shuyu.gsyvideoplayer.video.NormalGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import butterknife.BindView;
@@ -32,7 +33,7 @@ public class RecyclerItemNormalHolder extends RecyclerItemBaseHolder {
     protected Context context = null;
     
     @BindView(R.id.video_item_player)
-    StandardGSYVideoPlayer gsyVideoPlayer;
+    NormalGSYVideoPlayer gsyVideoPlayer;
 
     ImageView imageView;
 

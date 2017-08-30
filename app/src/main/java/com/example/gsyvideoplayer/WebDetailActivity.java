@@ -78,6 +78,7 @@ public class WebDetailActivity extends AppCompatActivity {
         webPlayer.setLockLand(false);
         webPlayer.setShowFullAnimation(false);
         webPlayer.setNeedLockFull(true);
+        webPlayer.setDuration("05:32");
         //detailPlayer.setOpenPreView(true);
         webPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
