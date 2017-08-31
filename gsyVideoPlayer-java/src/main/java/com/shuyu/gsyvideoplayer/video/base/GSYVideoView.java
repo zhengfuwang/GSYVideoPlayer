@@ -159,6 +159,8 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     //http request header
     protected Map<String, String> mMapHeadData = new HashMap<>();
 
+    protected boolean isObtainingMediaUrl = false;
+
     //网络监听
     protected NetInfoModule mNetInfoModule;
 

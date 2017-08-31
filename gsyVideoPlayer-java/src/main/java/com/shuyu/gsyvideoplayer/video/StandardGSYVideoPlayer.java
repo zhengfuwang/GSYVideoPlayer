@@ -416,7 +416,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         setViewShowState(mTopContainer, VISIBLE);
         setViewShowState(mBottomContainer, INVISIBLE);
         setViewShowState(mStartButton, VISIBLE);
-        setViewShowState(mLoadingProgressBar, INVISIBLE);
+        setViewShowState(mLoadingProgressBar, isObtainingMediaUrl ? VISIBLE : INVISIBLE);
         setViewShowState(mThumbImageViewLayout, VISIBLE);
         setViewShowState(mBottomProgressBar, INVISIBLE);
         setViewShowState(mLockScreen, (mIfCurrentIsFullscreen && mNeedLockFull) ? VISIBLE : GONE);

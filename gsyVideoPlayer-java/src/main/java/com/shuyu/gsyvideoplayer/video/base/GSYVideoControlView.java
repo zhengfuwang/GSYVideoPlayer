@@ -599,11 +599,13 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
      */
     @Override
     public void startWithSetUp(VideoPlayModel videoPlayModel, boolean cacheWithPlay, File cachePath) {
+        isObtainingMediaUrl = true;
         if (isCurrentMediaListener() && setUp(videoPlayModel, cacheWithPlay, cachePath)) {
             clickStartIcon();
         } else {
             Log.e(getClass().getName(), "startWithSetUp() Failed !");
         }
+        isObtainingMediaUrl = false;
     }
 
     @Override
