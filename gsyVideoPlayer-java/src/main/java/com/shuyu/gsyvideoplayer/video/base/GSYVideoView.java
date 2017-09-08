@@ -954,7 +954,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
     }
 
     public String getMediaUrl() {
-        return mVideoPlayModel.getVideoUrl();
+        return mVideoPlayModel == null ? null : mVideoPlayModel.getVideoUrl();
     }
 
 }
