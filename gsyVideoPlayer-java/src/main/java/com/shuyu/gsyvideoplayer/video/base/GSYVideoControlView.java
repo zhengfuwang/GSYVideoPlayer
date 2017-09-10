@@ -423,7 +423,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             }
         } else if (i == R.id.surface_container) {
             // 播放地址无效时禁止全屏操作
-            if (TextUtils.isEmpty(mVideoPlayModel.getVideoUrl())) {
+            if (TextUtils.isEmpty(getMediaUrl())) {
                 return;
             }
             if (mVideoAllCallBack != null && isCurrentMediaListener()) {
