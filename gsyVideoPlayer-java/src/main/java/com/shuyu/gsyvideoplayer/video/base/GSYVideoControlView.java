@@ -629,7 +629,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         // 未设置播放地址不处理拖动进度条逻辑
-        if (TextUtils.isEmpty(mVideoPlayModel.getVideoUrl())) {
+        if (mVideoPlayModel == null || TextUtils.isEmpty(mVideoPlayModel.getVideoUrl())) {
             return;
         }
         if (mVideoAllCallBack != null && isCurrentMediaListener()) {
