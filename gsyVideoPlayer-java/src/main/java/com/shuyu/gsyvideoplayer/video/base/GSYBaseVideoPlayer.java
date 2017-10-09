@@ -264,11 +264,15 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
             postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if (mLockLand && mOrientationUtils.getIsLand() != 1) {
+                    if (mLockLand && mOrientationUtils != null && mOrientationUtils.getIsLand() != 1) {
                         mOrientationUtils.resolveByClick();
                     }
-                    gsyVideoPlayer.setVisibility(VISIBLE);
-                    frameLayout.setVisibility(VISIBLE);
+                    if (gsyVideoPlayer != null) {
+                        gsyVideoPlayer.setVisibility(VISIBLE);
+                    }
+                    if (frameLayout != null) {
+                        frameLayout.setVisibility(VISIBLE);
+                    }
                 }
             }, 300);
         } else {
