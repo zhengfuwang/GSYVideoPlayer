@@ -16,19 +16,19 @@ ext {
     //ViewLibraries
     butterKnifeVersion = '8.4.0'
 
-    ijkplayer = '0.8.2'
-    DanmakuFlameMaster = '0.6.4'
+    ijkplayer = '0.8.8'
+    DanmakuFlameMaster = '0.9.16'
 
     transitionseverywhere = '1.7.0'
 
     //DataLibraries
     videocache = '2.7.0'
-    leakcanary = '1.5'
+    leakcanary = '1.6.1'
 
     androidDependencies = [
             recyclerView: "com.android.support:recyclerview-v7:${supportLibraryVersion}",
             appcompat_v7: "com.android.support:appcompat-v7:${otherLibraryVersion}",
-            cardview_v7 : "com.android.support:cardview-v7:23.2.0",
+            cardview_v7 : "com.android.support:cardview-v7:${supportLibraryVersion}",
             support_v4  : "com.android.support:support-v4:${supportLibraryVersion}",
             design      : "com.android.support:design:${otherLibraryVersion}",
     ]
