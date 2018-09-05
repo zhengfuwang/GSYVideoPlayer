@@ -1,11 +1,9 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
 
 android {
 
     def globalConfiguration = rootProject.extensions.getByName("ext")
     compileSdkVersion globalConfiguration.androidCompileSdkVersion
-    buildToolsVersion globalConfiguration.androidBuildToolsVersion
 
     defaultConfig {
         applicationId "com.example.gsyvideoplayer"
@@ -42,57 +40,58 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+    buildToolsVersion '27.0.3'
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     def viewDependencies = rootProject.ext.viewDependencies
     def androidDependencies = rootProject.ext.androidDependencies
     def dataDependencies = rootProject.ext.dataDependencies
-    apt viewDependencies.apt_butterKnife
-    compile viewDependencies.butterKnife
-    compile androidDependencies.recyclerView
-    compile viewDependencies.DanmakuFlameMaster
-    compile viewDependencies.ndkbitmap_armv7a
-    compile viewDependencies.ndkbitmap_armv5
-    compile viewDependencies.ndkbitmap_x86
-    compile androidDependencies.support_v4
+    annotationProcessor viewDependencies.apt_butterKnife
+    implementation viewDependencies.butterKnife
+    implementation androidDependencies.recyclerView
+    implementation viewDependencies.DanmakuFlameMaster
+    implementation viewDependencies.ndkbitmap_armv7a
+    implementation viewDependencies.ndkbitmap_armv5
+    implementation viewDependencies.ndkbitmap_x86
+    implementation androidDependencies.support_v4
     //debugCompile dataDependencies.leakcanary
-    compile project(':gsyVideoPlayer')
+    implementation project(':gsyVideoPlayer')
 
-    compile 'io.reactivex.rxjava2:rxjava:2.1.2'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'com.google.code.gson:gson:2.8.1'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.blankj:utilcode:1.7.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.2'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'com.google.code.gson:gson:2.8.1'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.blankj:utilcode:1.7.1'
 
     //jcenter
-    //compile 'com.shuyu:GSYVideoPlayer:2.0.4'
+    //implementation 'com.shuyu:GSYVideoPlayer:2.0.4'
 
-    //compile 'com.shuyu:gsyVideoPlayer-java:2.0.4'
+    //implementation 'com.shuyu:gsyVideoPlayer-java:2.0.4'
 
-    //compile 'com.shuyu:gsyVideoPlayer-armv5:2.0.4'
-    //compile 'com.shuyu:gsyVideoPlayer-armv7a:2.0.4'
-    //compile 'com.shuyu:gsyVideoPlayer-arm64:2.0.4'
-    //compile 'com.shuyu:gsyVideoPlayer-x64:2.0.4'
-    //compile 'com.shuyu:gsyVideoPlayer-x86:2.0.4'
+    //implementation 'com.shuyu:gsyVideoPlayer-armv5:2.0.4'
+    //implementation 'com.shuyu:gsyVideoPlayer-armv7a:2.0.4'
+    //implementation 'com.shuyu:gsyVideoPlayer-arm64:2.0.4'
+    //implementation 'com.shuyu:gsyVideoPlayer-x64:2.0.4'
+    //implementation 'com.shuyu:gsyVideoPlayer-x86:2.0.4'
 
-    //compile 'com.shuyu:gsyVideoPlayer-ex_so:2.0.4'
+    //implementation 'com.shuyu:gsyVideoPlayer-ex_so:2.0.4'
 
     //jitpack
 
-    //compile 'com.github.CarGuo:GSYVideoPlayer:v2.0.4'
+    //implementation 'com.github.CarGuo:GSYVideoPlayer:v2.0.4'
 
-    //compile 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v2.0.4'
+    //implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v2.0.4'
 
-    //compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.4'
+    //implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-ex_so:v2.0.4'
 
-    //compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v2.0.4'
-    //compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v2.0.4'
-    //compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v2.0.4'
-    //compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v2.0.4'
-    //compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v2.0.4'
-    //compile 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v2.0.4'
+    //implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v2.0.4'
+    //implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v2.0.4'
+    //implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v2.0.4'
+    //implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v2.0.4'
+    //implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v2.0.4'
+    //implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v2.0.4'
 
 
 }

@@ -29,14 +29,12 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    api fileTree(dir: 'libs', include: ['*.jar'])
     def viewDependencies = rootProject.ext.viewDependencies
     def dataDependencies = rootProject.ext.dataDependencies
-    compile viewDependencies.ijkplayer_java
-    compile viewDependencies.ijkplayer_exo
-    compile viewDependencies.transitionseverywhere
-    compile dataDependencies.videocache
-    compile androidDependencies.appcompat_v7
+    api viewDependencies.ijkplayer_java
+    api viewDependencies.ijkplayer_exo
+    api viewDependencies.transitionseverywhere
+    api dataDependencies.videocache
+    api androidDependencies.appcompat_v7
 }
-
-apply from: '../bintray.gradle'
