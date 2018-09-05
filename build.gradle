@@ -4,8 +4,8 @@ apply from: 'dependencies.gradle'
 buildscript {
     repositories {
         jcenter()
-        maven { url 'https://jitpack.io' }
         google()
+        maven { url 'https://jitpack.io' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.4'
@@ -17,7 +17,7 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
-		maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
+        google()
         maven { url 'https://jitpack.io' }
     }
 }
