@@ -22,7 +22,7 @@ ext {
     transitionseverywhere = '1.7.0'
 
     //DataLibraries
-    videocache = '2.7.0'
+    videocache = '2.7.1'
     leakcanary = '1.6.1'
 
     androidDependencies = [
