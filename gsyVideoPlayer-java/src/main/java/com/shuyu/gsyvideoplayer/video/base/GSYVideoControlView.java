@@ -385,6 +385,13 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         mThumbImageViewLayout.setOnTouchListener(onTouchListener);
     }
 
+
+    private boolean needTipsMobileNetwork(String videoUrl) {
+        // 移动流量播放提示
+        boolean tipsMobileNetWork = mNeedShowWifiTip && !GSYVideoManager.instance().isIgnoreMobileNetwork() &&  !CommonUtil.isWifiConnected(getActivityContext());
+        return !mUrl.startsWith("file") && tipsMobileNetWork;
+    }
+
     @Override
     public void onClick(View v) {
         int i = v.getId();
@@ -413,7 +420,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                 return;
             }
             if (mCurrentState == CURRENT_STATE_NORMAL) {
-                if (!mUrl.startsWith("file") && !CommonUtil.isWifiConnected(getActivityContext()) && mNeedShowWifiTip) {
+                if (needTipsMobileNetwork(mUrl)) {
                     showWifiDialog();
                     return;
                 }
@@ -438,6 +445,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             startDismissControlViewTimer();
         } else if (i == R.id.flow_play_continue) {
             // 移动网络继续播放
+            GSYVideoManager.instance().setIgnoreMobileNetwork(true);
             startPlayLogic();
         } else if (i == R.id.flow_play_cancel) {
             // 取消移动网络播放
@@ -859,8 +867,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             return;
         }
         if (mCurrentState == CURRENT_STATE_NORMAL || mCurrentState == CURRENT_STATE_ERROR) {
-            if (!mUrl.startsWith("file") && !CommonUtil.isWifiConnected(getContext())
-                    && mNeedShowWifiTip) {
+            if (needTipsMobileNetwork(mUrl)) {
                 showWifiDialog();
                 return;
             }

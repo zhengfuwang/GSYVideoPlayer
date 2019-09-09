@@ -115,12 +115,23 @@ public class GSYVideoManager implements IMediaPlayer.OnPreparedListener, IMediaP
     //是否需要外部超时判断
     private boolean needTimeOutOther;
 
+    // 移动网络
+    private boolean ignoreMobileNetwork = false;
+
 
     public static synchronized GSYVideoManager instance() {
         if (videoManager == null) {
             videoManager = new GSYVideoManager(ijkLibLoader);
         }
         return videoManager;
+    }
+
+    public boolean isIgnoreMobileNetwork() {
+        return ignoreMobileNetwork;
+    }
+
+    public void setIgnoreMobileNetwork(boolean ignoreMobileNetwork) {
+        this.ignoreMobileNetwork = ignoreMobileNetwork;
     }
 
     /**
